@@ -1,16 +1,20 @@
 <script>
   import Router from "svelte-spa-router";
-  import Pip from "./routes/pip.svelte";
+  import Python from "./routes/Python.svelte";
+  import Home from "./routes/Home.svelte";
 
   const routes = {
-    "/": Pip
+    "/": Home,
+    "/python": Python
   };
 </script>
 
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
-  rel="stylesheet" />
+<style>
+  :global(.CodeMirror) {
+    text-align: left !important;
+    height: auto;
+    width: 100%;
+  }
+</style>
 
-<main>
-  <Router {routes} />
-</main>
+<Router {routes} />
