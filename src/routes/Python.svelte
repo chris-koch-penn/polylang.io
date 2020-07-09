@@ -73,7 +73,7 @@
 
 <style>
   .editor-row {
-    height: 70vh;
+    height: 75vh;
   }
   .button-row {
     padding: 15px 0px;

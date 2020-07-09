@@ -1,7 +1,3 @@
-<script>
-
-</script>
-
 <style>
   .sk-grid {
     width: 60px;
