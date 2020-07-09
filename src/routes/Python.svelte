@@ -40,12 +40,20 @@
   }
 
   async function runCode() {
+    matchImports(editor.getValue());
     await until(() => packagesAreLoaded == true);
-    pyodide.runPython("print('Console output: ')");
     pyodide.runPython(editor.getValue());
     let clr = "x = sys.stdout.getvalue()\nsys.stdout = io.StringIO()\nx";
     let stdout = pyodide.runPython(clr);
-    pyConsole.innerText = stdout;
+    pyConsole.innerText = "Console output: \n" + stdout;
+  }
+
+  function matchImports(imports) {
+    let rx = /(?:from[ ]+(.+)[\.]+.+[ ]+)?import[ ]+(\S+)[ ]*/g;
+    let matches = imports.matchAll(rx);
+    matches = [...matches].map(a => (a[1] ? a[1] : a[2]));
+    matches = [...new Set(matches)];
+    alert(matches);
   }
 
   function makeEditor() {
@@ -58,19 +66,23 @@
         indentUnit: 4,
         matchBrackets: true
       });
+      editor.setSize("100%", "100%");
     }
   }
 </script>
 
 <style>
+  .editor-row {
+    height: 70vh;
+  }
   .button-row {
     padding: 15px 0px;
     margin-bottom: 20px;
     background-color: #2b2b2b;
   }
   button {
-    width: 100%;
-    word-break: break-all;
+    border: none;
+    font-size: 18px;
   }
   .btn:focus,
   .btn:active {
@@ -81,7 +93,16 @@
     font-family: "montserrat";
     color: #cfbff7;
     background-color: transparent;
-    border: none;
+    font-weight: bold;
+    padding-top: 3px;
+    padding-left: 20px;
+    line-height: 1;
+    margin: 0px;
+  }
+  .console {
+    background-color: lightslategrey;
+    height: 100%;
+    padding: 8px 20px;
   }
 </style>
 
@@ -96,11 +117,6 @@
     on:load={makeEditor}>
 
   </script>
-  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js">
-
-  </script>  <script
-    src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" ✂prettier:content✂="CgogIA==" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=">{}</script>  <script
-    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" ✂prettier:content✂="CgogIA==" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=">{}</script> -->
 </svelte:head>
 
 <link
@@ -118,34 +134,50 @@
 
 <div class="row button-row">
   <div class="col-2">
-    <button class="polylang-logo">polylang.io</button>
+    <h3 class="polylang-logo">polylang.io</h3>
   </div>
-  <div class="col-1">
-    <button on:click={runCode} class="btn btn-sm btn-success">Run</button>
-  </div>
-  <div class="col-1">
-    <button on:click={runCode} class="btn btn-sm btn-light">Save</button>
-  </div>
-  <div class="col-1">
-    <button on:click={runCode} class="btn btn-sm btn-light">Share</button>
+  <div class="col">
+    <button on:click={runCode} class="btn btn-md btn-outline-success">
+      <i class="fa fa-code" aria-hidden="true" />
+      &nbsp;Run
+    </button>
+    <button on:click={runCode} class="btn btn-md btn-outline-light">
+      <i class="fa fa-floppy-o" aria-hidden="true" />
+      &nbsp;Save
+    </button>
+    <button on:click={runCode} class="btn btn-md btn-outline-light">
+      <i class="fa fa-paper-plane-o" aria-hidden="true" />
+      &nbsp;Share
+    </button>
   </div>
   <div class="col-2" />
   <div class="col-2" style="margin:auto">
-    <button on:click={runCode} class="btn btn-sm btn-light">Support</button>
+    <button on:click={runCode} class="btn btn-lg btn-outline-light">
+      Support
+    </button>
   </div>
 </div>
-<div class="row">
+<div class="row editor-row">
   <div class="col-1" />
   <div class="col-6">
     <textarea bind:value={code} bind:this={editorTA} />
   </div>
-  <div class="col-5">
-    <div bind:this={pyConsole}>
+  <div class="col-4">
+    <div bind:this={pyConsole} class="console">
       {#if !interpreterHasLoaded}
-        <Spinner />
-        <p style="text-align:center;">Loading Python Interpreter</p>
+        <div
+          class="d-flex justify-content-center align-items-center"
+          style="height:100%">
+          <div>
+            <Spinner />
+            <p style="margin-top: 20px;margin-bottom: 20%;">
+              Loading Python Interpreter
+            </p>
+          </div>
+        </div>
       {/if}
     </div>
     <div bind:this={canvas} />
   </div>
+  <div class="col-1" />
 </div>

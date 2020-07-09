@@ -12,8 +12,8 @@
 <style>
   :global(.CodeMirror) {
     text-align: left !important;
-    height: auto;
     width: 100%;
+    height: 100%;
   }
 </style>
 
