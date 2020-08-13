@@ -1,6 +1,7 @@
 <script>
-  // import languagePluginLoader from "pyodide";
-  import Spinner from "../components/spinner.svelte";
+  import languagePluginLoader from "pyodide";
+  import Spinner from "../components/Spinner.svelte";
+  import NavBar from "../components/NavBar.svelte";
   let pyConsole, canvas, editorTA, editor;
   let packageList = [];
   let packagesAreLoaded = false;
@@ -42,10 +43,16 @@
   async function runCode() {
     matchImports(editor.getValue());
     await until(() => packagesAreLoaded == true);
-    pyodide.runPython(editor.getValue());
-    let clr = "x = sys.stdout.getvalue()\nsys.stdout = io.StringIO()\nx";
-    let stdout = pyodide.runPython(clr);
-    pyConsole.innerText = "Console output: \n" + stdout;
+    let consoleMsg = "<xmp style='white-space: break-spaces;'>Console output: \n";
+    try {
+      pyodide.runPython(editor.getValue());
+      let clr = "x = sys.stdout.getvalue()\nsys.stdout = io.StringIO()\nx";
+      let stdout = pyodide.runPython(clr);
+      pyConsole.innerHTML = consoleMsg + stdout + "</xmp>";
+    } catch(err) {
+      let lines = err.message.split("\n").slice(3).join("\n");
+      pyConsole.innerHTML = consoleMsg + lines + "</xmp>";
+    }
   }
 
   function matchImports(imports) {
@@ -53,110 +60,57 @@
     let matches = imports.matchAll(rx);
     matches = [...matches].map(a => (a[1] ? a[1] : a[2]));
     matches = [...new Set(matches)];
-    alert(matches);
   }
 
   function makeEditor() {
-    numScriptsLoaded++;
-    if (numScriptsLoaded == 2) {
-      editor = window.CodeMirror.fromTextArea(editorTA, {
-        theme: "darcula",
-        mode: { name: "python", version: 3, singleLineStringErrors: false },
-        lineNumbers: true,
-        indentUnit: 4,
-        matchBrackets: true
-      });
-      editor.setSize("100%", "100%");
-    }
+    editor = window.CodeMirror.fromTextArea(editorTA, {
+      theme: "darcula",
+      mode: { name: "python", version: 3, singleLineStringErrors: false },
+      lineNumbers: true,
+      indentUnit: 4,
+      matchBrackets: true
+    });
+    editor.setSize("100%", "100%");
+  }
+
+  function appendPythonHighlightScript() {
+    let el = document.createElement("script");
+    document.head.appendChild(el);
+    el.onload = makeEditor;
+    el.src =
+      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.55.0/mode/python/python.min.js";
   }
 </script>
 
-<style>
+<style lang="scss">
+  @import "../theme.scss";
+
   .editor-row {
     height: 75vh;
-  }
-  .button-row {
-    padding: 15px 0px;
-    margin-bottom: 20px;
-    background-color: #2b2b2b;
-  }
-  button {
-    border: none;
-    font-size: 18px;
-  }
-  .btn:focus,
-  .btn:active {
-    outline: none !important;
-    box-shadow: none;
-  }
-  .polylang-logo {
-    font-family: "montserrat";
-    color: #cfbff7;
-    background-color: transparent;
-    font-weight: bold;
-    padding-top: 3px;
-    padding-left: 20px;
-    line-height: 1;
-    margin: 0px;
   }
   .console {
     background-color: lightslategrey;
     height: 100%;
     padding: 8px 20px;
   }
+
+  textarea {
+    background-color:$darkest;
+    height:75vh;
+    width:100%;
+    border:none;
+  }
 </style>
 
 <svelte:head>
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.55.0/codemirror.min.js"
-    on:load={makeEditor}>
-
-  </script>
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.55.0/mode/python/python.min.js"
-    on:load={makeEditor}>
+    on:load={() => appendPythonHighlightScript()}>
 
   </script>
 </svelte:head>
 
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.55.0/codemirror.min.css" />
-<link
-  href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
-  rel="stylesheet" />
-<link
-  rel="stylesheet"
-  href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.55.0/theme/darcula.min.css" />
-
-<div class="row button-row">
-  <div class="col-2">
-    <h3 class="polylang-logo">polylang.io</h3>
-  </div>
-  <div class="col">
-    <button on:click={runCode} class="btn btn-md btn-outline-success">
-      <i class="fa fa-code" aria-hidden="true" />
-      &nbsp;Run
-    </button>
-    <button on:click={runCode} class="btn btn-md btn-outline-light">
-      <i class="fa fa-floppy-o" aria-hidden="true" />
-      &nbsp;Save
-    </button>
-    <button on:click={runCode} class="btn btn-md btn-outline-light">
-      <i class="fa fa-paper-plane-o" aria-hidden="true" />
-      &nbsp;Share
-    </button>
-  </div>
-  <div class="col-2" />
-  <div class="col-2" style="margin:auto">
-    <button on:click={runCode} class="btn btn-lg btn-outline-light">
-      Support
-    </button>
-  </div>
-</div>
+<NavBar showButtons={true} runCode={runCode} />
 <div class="row editor-row">
   <div class="col-1" />
   <div class="col-6">
