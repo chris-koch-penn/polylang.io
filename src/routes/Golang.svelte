@@ -12,10 +12,9 @@
   appendScript("/golang/playground.js");
   appendScript("/golang/golang_main.js");
 
-  function getCode() {
+  window.GET_GOLANG_CODE = () => {
     return editor.getValue();
-  }
-  window.GET_GOLANG_CODE = getCode;
+  };
 </script>
 
 <!-- 
@@ -23,8 +22,8 @@
   <script src="/golang/wasm_exec.js">
 
   </script>  <script
-    src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ✂prettier:content✂="CgogIA==" ✂prettier:content✂="e30=">{}</script>  <script
-    src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js" ✂prettier:content✂="CgogIA==" ✂prettier:content✂="e30=">{}</script>  <script src="/golang/playground.js">
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ✂prettier:content✂="CgogIA==" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=">{}</script>  <script
+    src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js" ✂prettier:content✂="CgogIA==" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=">{}</script>  <script src="/golang/playground.js">
 
   </script>  <script src="/golang/golang_main.js">
 

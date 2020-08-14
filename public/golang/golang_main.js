@@ -60,7 +60,9 @@ $(document).ready(function () {
             enableShortcuts: true,
             transport: {
                 Run: (body, output) => {
-                    $('#controls input').attr('disabled', true);
+                    if (window && window.GOLANG_EXECUTING) return;
+                    window.GOLANG_EXECUTING = true;
+                    $('#run button').attr('disabled', true);
 
                     writeToGoFilesystem('/main.go', body);
                     output({
@@ -94,9 +96,7 @@ $(document).ready(function () {
                                 Body: 'wasm error: ' + (err.message || 'unknown'),
                             });
                         })
-                        .finally(() => $('#controls input').attr('disabled', false))
-                        ;
-
+                        .finally(() => window.GOLANG_EXECUTING = false);
                     return {
                         Kill: () => { },
                     };
