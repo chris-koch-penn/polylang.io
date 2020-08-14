@@ -104,8 +104,6 @@ $(document).ready(function () {
             },
         });
 
-        $('#run').val('Run');
-
         $('#fmt').show();
         $('#fmt').click(() => {
             $('#controls input').attr('disabled', true);

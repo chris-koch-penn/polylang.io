@@ -1,6 +1,8 @@
 <script>
+  import NavBar from "../components/NavBar.svelte";
   let initialCode =
     "package main\nfunc main() {\nprintln('Hello, WebAssembly playground!')\n}";
+  let runCode = () => {};
 </script>
 
 <svelte:head>
@@ -16,9 +18,6 @@
     src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js">
 
   </script>
-  <script src="/golang/jquery-linedtextarea.js">
-
-  </script>
   <script src="/golang/playground.js">
 
   </script>
@@ -27,7 +26,7 @@
   </script>
 </svelte:head>
 
-<div id="banner">
+<!-- <div id="banner">
   <div id="controls">
     <input type="button" value="Loading..." id="run" disabled />
     <input
@@ -37,7 +36,8 @@
       style="display:none;"
       disabled />
   </div>
-</div>
+</div> -->
+<NavBar showButtons={true} runCode={false} />
 <div id="wrap">
   <textarea
     itemprop="description"

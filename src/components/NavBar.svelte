@@ -43,10 +43,20 @@
 
   <div class="d-flex align-items-center col">
     {#if showButtons}
-      <button on:click={runCode} class="btn btn-md btn-outline-success">
-        <i class="fa fa-code" aria-hidden="true" />
-        &nbsp;Run
-      </button>
+      {#if runCode}
+        <button
+          on:click={runCode}
+          class="btn btn-md btn-outline-success"
+          id="run">
+          <i class="fa fa-code" aria-hidden="true" />
+          &nbsp;Run
+        </button>
+      {:else}
+        <button class="btn btn-md btn-outline-success" id="run">
+          <i class="fa fa-code" aria-hidden="true" />
+          &nbsp;Run
+        </button>
+      {/if}
       <button on:click={runCode} class="btn btn-md btn-outline-light">
         <i class="fa fa-floppy-o" aria-hidden="true" />
         &nbsp;Save
