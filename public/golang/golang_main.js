@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Extensive modifications made by Chris Koch 2020.
+// Extensive modifications made by Chris Koch, 2020.
 function PlaygroundOutput(el) {
     'use strict';
 
@@ -77,7 +77,7 @@ document.onreadystatechange = async () => {
             WebAssembly.instantiate(wasm, go.importObject).then((result) => go.run(result.instance)).catch(reject);
         });
 
-        await Promise.all(
+        let archivePromises =
             [
                 '/golang/prebuilt/runtime.a',
                 '/golang/prebuilt/internal/bytealg.a',
@@ -85,18 +85,20 @@ document.onreadystatechange = async () => {
                 '/golang/prebuilt/runtime/internal/atomic.a',
                 '/golang/prebuilt/runtime/internal/math.a',
                 '/golang/prebuilt/runtime/internal/sys.a',
-            ].map(path => fetch(path)
-                .then(response => response.arrayBuffer())
-                .then(buf => writeToGoFilesystem(path, new Uint8Array(buf)))
-            ).concat(
-                ['compile', 'link', 'gofmt']
-                    .map(async cmd => {
-                        let res = await fetch('golang/cmd/' + cmd + '.wasm')
-                        let buf = await res.arrayBuffer();
-                        cmds[cmd] = new Uint8Array(buf);
-                    })
-            )
-        )
+            ].map(async path => {
+                let res = await fetch(path);
+                let buf = await res.arrayBuffer();
+                writeToGoFilesystem(path, new Uint8Array(buf))
+            })
+
+        let cmdPromises = ['compile', 'link', 'gofmt'].map(async cmd => {
+            let res = await fetch('golang/cmd/' + cmd + '.wasm')
+            let buf = await res.arrayBuffer();
+            cmds[cmd] = new Uint8Array(buf);
+        })
+
+        let initPromises = [...archivePromises, ...cmdPromises]
+        await Promise.all(initPromises);
 
         const decoder = new TextDecoder('utf-8');
         const encoder = new TextEncoder('utf-8');

@@ -17,8 +17,7 @@
     {
       name: "Golang",
       link: "#/golang",
-      innerHTML:
-        "Version 1.04. Only includes standard library currently. <a href='./golang/go_index.html'>goto</a>"
+      innerHTML: "Version 1.12. Only includes runtime library currently."
     },
     {
       name: "Ruby",
