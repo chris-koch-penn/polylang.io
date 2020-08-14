@@ -81,6 +81,8 @@ $(document).ready(function () {
                         });
                     };
 
+                    format();
+
                     exec(cmds['compile'], ['-p', 'main', '-complete', '-dwarf=false', '-pack', '-importcfg', 'importcfg', 'main.go'])
                         .then((code) => code || exec(cmds['link'], ['-importcfg', 'importcfg.link', '-buildmode=exe', 'main.a']))
                         .then((code) => code || exec(readFromGoFilesystem('a.out')))
@@ -105,22 +107,18 @@ $(document).ready(function () {
         });
 
         $('#fmt').show();
-        $('#fmt').click(() => {
-            $('#controls input').attr('disabled', true);
-
-            writeToGoFilesystem('/main.go', $('#code').val());
-            goStderr = (buf) => console.log(decoder.decode(buf));
-            goStdout = goStderr;
+        $('#fmt').click(format);
+        function format() {
+            writeToGoFilesystem('/main.go', window.GET_GOLANG_CODE());
             exec(cmds['gofmt'], ['-w', 'main.go'])
-                .then((code) => {
-                    if (!code) {
-                        $('#code').val(decoder.decode(readFromGoFilesystem('main.go')));
+                .then(retVal => {
+                    if (!retVal) {
+                        var fmttedCode = decoder.decode(readFromGoFilesystem('main.go'));
+                        console.log("FMTTED_CODE: ", fmttedCode);
+                        window.SET_GOLANG_CODE(fmttedCode);
                     }
                 })
-                .finally(() => $('#controls input').attr('disabled', false))
-                ;
-        });
-
-        $('#controls input').attr('disabled', false);
+                .finally(() => { });
+        }
     });
 });

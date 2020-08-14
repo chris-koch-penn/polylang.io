@@ -15,19 +15,11 @@
   window.GET_GOLANG_CODE = () => {
     return editor.getValue();
   };
+  window.SET_GOLANG_CODE = val => {
+    editor.setValue(val);
+    editor.refresh();
+  };
 </script>
-
-<!-- 
-<svelte:head>
-  <script src="/golang/wasm_exec.js">
-
-  </script>  <script
-    src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" ✂prettier:content✂="CgogIA==" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=">{}</script>  <script
-    src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js" ✂prettier:content✂="CgogIA==" ✂prettier:content✂="e30=" ✂prettier:content✂="e30=">{}</script>  <script src="/golang/playground.js">
-
-  </script>  <script src="/golang/golang_main.js">
-
-  </script></svelte:head> -->
 
 <NavBar showButtons={true} runCode={false} />
 <div class="row editor-row">
