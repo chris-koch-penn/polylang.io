@@ -2,12 +2,11 @@
   import languagePluginLoader from "pyodide";
   import Spinner from "../components/Spinner.svelte";
   import NavBar from "../components/NavBar.svelte";
-  let pyConsole, canvas, editorTA, editor;
+  import Editor from "../components/Editor.svelte";
+  let outputConsole, canvas, editorTA, editor;
   let packageList = [];
   let packagesAreLoaded = false;
   let interpreterHasLoaded = false;
-  let code = "";
-  let numScriptsLoaded = 0;
   $: loadPackages(packageList);
 
   window.iodide = {
@@ -43,15 +42,19 @@
   async function runCode() {
     matchImports(editor.getValue());
     await until(() => packagesAreLoaded == true);
-    let consoleMsg = "<xmp style='white-space: break-spaces;'>Console output: \n";
+    let consoleMsg =
+      "<xmp style='white-space: break-spaces;font-size: 15px;'>Console output: \n";
     try {
       pyodide.runPython(editor.getValue());
       let clr = "x = sys.stdout.getvalue()\nsys.stdout = io.StringIO()\nx";
       let stdout = pyodide.runPython(clr);
-      pyConsole.innerHTML = consoleMsg + stdout + "</xmp>";
-    } catch(err) {
-      let lines = err.message.split("\n").slice(3).join("\n");
-      pyConsole.innerHTML = consoleMsg + lines + "</xmp>";
+      outputConsole.innerHTML = consoleMsg + stdout + "</xmp>";
+    } catch (err) {
+      let lines = err.message
+        .split("\n")
+        .slice(3)
+        .join("\n");
+      outputConsole.innerHTML = consoleMsg + lines + "</xmp>";
     }
   }
 
@@ -83,41 +86,17 @@
 </script>
 
 <style lang="scss">
-  @import "../theme.scss";
 
-  .editor-row {
-    height: 75vh;
-  }
-  .console {
-    background-color: lightslategrey;
-    height: 100%;
-    padding: 8px 20px;
-  }
-
-  textarea {
-    background-color:$darkest;
-    height:75vh;
-    width:100%;
-    border:none;
-  }
 </style>
 
-<svelte:head>
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.55.0/codemirror.min.js"
-    on:load={() => appendPythonHighlightScript()}>
-
-  </script>
-</svelte:head>
-
-<NavBar showButtons={true} runCode={runCode} />
+<NavBar showButtons={true} {runCode} />
 <div class="row editor-row">
   <div class="col-1" />
   <div class="col-6">
-    <textarea bind:value={code} bind:this={editorTA} />
+    <Editor bind:editor language={'python'} />
   </div>
   <div class="col-4">
-    <div bind:this={pyConsole} class="console">
+    <div bind:this={outputConsole} class="console">
       {#if !interpreterHasLoaded}
         <div
           class="d-flex justify-content-center align-items-center"

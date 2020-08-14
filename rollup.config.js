@@ -4,6 +4,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from "svelte-preprocess";
+import { wasm } from '@rollup/plugin-wasm';
 
 const production = !process.env.ROLLUP_WATCH;
 const preprocess = sveltePreprocess({
@@ -25,7 +26,7 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'public/build/bundle.js'
+		file: 'public/build/bundle.js',
 	},
 	plugins: [
 		svelte({
@@ -49,6 +50,7 @@ export default {
 			dedupe: ['svelte']
 		}),
 		commonjs(),
+		wasm(),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated

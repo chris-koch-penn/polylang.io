@@ -24,7 +24,7 @@
       name: "Ruby",
       link: "#/ruby",
       innerHTML:
-        "Version 1.04. Only includes standard library currently. <a href='./ruby/index.html'>goto</a>"
+        "Version 2.1.2 of MRuby. Auto-imports standard libraries. No support for external libraries currently."
     }
   ];
 </script>
