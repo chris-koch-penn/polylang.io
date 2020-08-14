@@ -16,7 +16,7 @@
     },
     {
       name: "Golang",
-      link: "./golang/go_index.html",
+      link: "#/golang",
       innerHTML:
         "Version 1.04. Only includes standard library currently. <a href='./golang/go_index.html'>goto</a>"
     },

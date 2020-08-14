@@ -39,7 +39,7 @@
 </script>
 
 <svelte:head>
-  <script src="/ruby/main.js" on:load={() => initRuby()}>
+  <script src="/ruby/ruby_main.js" on:load={() => initRuby()}>
 
   </script>
 </svelte:head>
