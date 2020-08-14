@@ -1,5 +1,5 @@
 <script>
-  import languagePluginLoader from "pyodide";
+  import { appendScript, until, consoleMsg } from "../utils.js";
   import Spinner from "../components/Spinner.svelte";
   import NavBar from "../components/NavBar.svelte";
   import Editor from "../components/Editor.svelte";
@@ -7,43 +7,40 @@
   let packageList = [];
   let packagesAreLoaded = false;
   let interpreterHasLoaded = false;
-  $: loadPackages(packageList);
+  let executing = false;
+  window.languagePluginUrl = "https://pyodide-cdn2.iodide.io/v0.15.0/full/";
+  appendScript(window.languagePluginUrl + "pyodide.js", setupMatplotlib);
+  loadPackages(packageList);
 
-  window.iodide = {
-    output: {
-      // This ensures matplotlib will be plotted correctly.
-      element: tagName => {
-        let elem = document.createElement(tagName);
-        canvas.innerHTML = "";
-        canvas.appendChild(elem);
-        return elem;
+  function setupMatplotlib() {
+    window.iodide = {
+      output: {
+        // This ensures matplotlib will be plotted correctly.
+        element: tagName => {
+          let elem = document.createElement(tagName);
+          canvas.innerHTML = "";
+          canvas.appendChild(elem);
+          return elem;
+        }
       }
-    }
-  };
-
-  function until(conditionFunction) {
-    const poll = resolve => {
-      if (conditionFunction()) resolve();
-      else setTimeout(_ => poll(resolve), 75);
     };
-
-    return new Promise(poll);
   }
 
-  async function loadPackages() {
+  async function loadPackages(packages) {
     packagesAreLoaded = false;
-    await languagePluginLoader;
-    interpreterHasLoaded = true;
-    await pyodide.loadPackage(packageList);
-    pyodide.runPython(`import sys\nimport io\nsys.stdout = io.StringIO()`);
-    packagesAreLoaded = true;
+    await until(() => window.languagePluginLoader);
+    window.languagePluginLoader.then(async () => {
+      interpreterHasLoaded = true;
+      await pyodide.loadPackage(packages);
+      pyodide.runPython(`import sys\nimport io\nsys.stdout = io.StringIO()`);
+      packagesAreLoaded = true;
+    });
   }
 
   async function runCode() {
-    matchImports(editor.getValue());
+    executing = true;
+    loadPackages(matchImports(editor.getValue()));
     await until(() => packagesAreLoaded == true);
-    let consoleMsg =
-      "<xmp style='white-space: break-spaces;font-size: 15px;'>Console output: \n";
     try {
       pyodide.runPython(editor.getValue());
       let clr = "x = sys.stdout.getvalue()\nsys.stdout = io.StringIO()\nx";
@@ -56,13 +53,19 @@
         .join("\n");
       outputConsole.innerHTML = consoleMsg + lines + "</xmp>";
     }
+    executing = false;
   }
 
-  function matchImports(imports) {
-    let rx = /(?:from[ ]+(.+)[\.]+.+[ ]+)?import[ ]+(\S+)[ ]*/g;
-    let matches = imports.matchAll(rx);
-    matches = [...matches].map(a => (a[1] ? a[1] : a[2]));
+  function matchImports(code) {
+    let rx1 = /(?:from[ ]+(.+)[\.]+.+[ ]+)?import[ ]+(\S+)[ ]*/g;
+    let rx2 = /(?:from[ ]+(.+)[\.]+.+[ ]+)?import[ ]+(.+)[\.]+.+[ ]*/g;
+    let matches1 = code.matchAll(rx1);
+    let matches2 = code.matchAll(rx2);
+    let matches = [...matches1, ...matches2].map(a => (a[1] ? a[1] : a[2]));
+    matches = matches.filter(el => !el.includes("."));
     matches = [...new Set(matches)];
+    console.log("MATCHES: ", matches);
+    return matches;
   }
 </script>
 
@@ -71,6 +74,9 @@
 </style>
 
 <NavBar showButtons={true} {runCode} />
+<div class="row d-flex justify-content-center">
+  <div bind:this={canvas} />
+</div>
 <div class="row editor-row">
   <div class="col-1" />
   <div class="col-6">
@@ -78,20 +84,21 @@
   </div>
   <div class="col-4">
     <div bind:this={outputConsole} class="console">
-      {#if !interpreterHasLoaded}
+      {#if !interpreterHasLoaded || (interpreterHasLoaded && executing)}
         <div
           class="d-flex justify-content-center align-items-center"
           style="height:100%">
           <div>
             <Spinner />
             <p style="margin-top: 20px;margin-bottom: 20%;">
-              Loading Python Interpreter
+              {#if executing}
+                Executing code (first run is slowest)
+              {:else}Loading Python Interpreter{/if}
             </p>
           </div>
         </div>
       {/if}
     </div>
-    <div bind:this={canvas} />
   </div>
   <div class="col-1" />
 </div>

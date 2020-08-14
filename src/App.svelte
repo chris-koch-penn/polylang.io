@@ -34,6 +34,14 @@
     height: 100%;
     padding: 8px 20px;
   }
+  :global(.stdout),
+  :global(.system) {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace;
+    font-size: 15px;
+    color: white;
+    white-space: break-spaces;
+  }
 </style>
 
 <Router {routes} />

@@ -1,7 +1,9 @@
 <script>
+  import { appendScript, consoleMsg } from "../utils.js";
   import { onMount } from "svelte";
   import NavBar from "../components/NavBar.svelte";
   import Editor from "../components/Editor.svelte";
+  appendScript("/ruby/ruby_main.js", initRuby);
   let outputConsole, editor;
   let runCode = () => {};
 
@@ -29,20 +31,19 @@
 
       //call wasm func
       var result = window.RUBY._ruby_exec(ptr, typedArray.length);
-      let output = window.RUBY_STDOUT ? window.RUBY_STDOUT : 'No output. Try writing something valid to "puts".';
-      let consoleMsg =
-      "<xmp style='white-space: break-spaces;font-size: 15px;'>Console output: \n";
+      let output = window.RUBY_STDOUT
+        ? window.RUBY_STDOUT
+        : 'No output. Try writing something valid to "puts".';
       outputConsole.innerHTML = consoleMsg + output + "</xmp>";
       window.RUBY_STDOUT = "";
     };
   }
 </script>
 
-<svelte:head>
+<!-- <svelte:head>
   <script src="/ruby/ruby_main.js" on:load={() => initRuby()}>
 
-  </script>
-</svelte:head>
+  </script></svelte:head> -->
 
 <NavBar showButtons={true} {runCode} />
 <div class="row editor-row">
@@ -51,7 +52,7 @@
     <Editor bind:editor language={'python'} />
   </div>
   <div class="col-4">
-    <div bind:this={outputConsole} class="console"></div>
+    <div bind:this={outputConsole} class="console" />
   </div>
   <div class="col-1" />
 </div>

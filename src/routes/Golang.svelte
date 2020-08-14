@@ -7,7 +7,6 @@
 </script>
 
 <svelte:head>
-  <!-- <link rel="stylesheet" href="style.css"> -->
   <script src="/golang/wasm_exec.js">
 
   </script>
@@ -27,17 +26,6 @@
   </script>
 </svelte:head>
 
-<!-- <div id="banner">
-  <div id="controls">
-    <input type="button" value="Loading..." id="run" disabled />
-    <input
-      type="button"
-      value="Format"
-      id="fmt"
-      style="display:none;"
-      disabled />
-  </div>
-</div> -->
 <NavBar showButtons={true} runCode={false} />
 <div class="row editor-row">
   <div class="col-1" />

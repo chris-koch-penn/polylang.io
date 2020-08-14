@@ -1,6 +1,6 @@
 <script>
   export let showButtons = false;
-  export let runCode = () => {};
+  export let runCode;
 </script>
 
 <style lang="scss">

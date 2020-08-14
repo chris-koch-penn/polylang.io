@@ -1,4 +1,5 @@
 <script>
+  import { appendScript } from "../utils.js";
   export let editor;
   export let language="";
   export let initialCode = "";
@@ -24,10 +25,7 @@
   }
 
   function appendHighlightScript() {
-    let el = document.createElement("script");
-    document.head.appendChild(el);
-    el.onload = makeEditor;
-    el.src = base + languageHighlightTags[language];
+    appendScript(base + languageHighlightTags[language], makeEditor)
   }
 </script>
 
