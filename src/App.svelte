@@ -35,11 +35,12 @@
     padding: 8px 20px;
   }
   :global(.stdout),
+  :global(.stderr),
   :global(.system) {
     font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
     font-size: 15px;
-    color: white;
+    color: white !important;
     white-space: break-spaces;
   }
 </style>

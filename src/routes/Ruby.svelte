@@ -40,11 +40,6 @@
   }
 </script>
 
-<!-- <svelte:head>
-  <script src="/ruby/ruby_main.js" on:load={() => initRuby()}>
-
-  </script></svelte:head> -->
-
 <NavBar showButtons={true} {runCode} />
 <div class="row editor-row">
   <div class="col-1" />

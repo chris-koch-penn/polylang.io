@@ -391,7 +391,8 @@ function PlaygroundOutput(el) {
         var output = $('<pre/>').appendTo(outdiv);
 
         function body() {
-            return $(opts.codeEl).val();
+            console.log(window.GET_GOLANG_CODE());
+            return window.GET_GOLANG_CODE();
         }
         function setBody(text) {
             $(opts.codeEl).val(text);
@@ -461,79 +462,8 @@ function PlaygroundOutput(el) {
             });
         }
 
-        var shareURL; // jQuery element to show the shared URL.
-        var sharing = false; // true if there is a pending request.
-        var shareCallbacks = [];
-        function share(opt_callback) {
-            if (opt_callback) shareCallbacks.push(opt_callback);
-
-            if (sharing) return;
-            sharing = true;
-
-            var sharingData = body();
-            $.ajax("/share", {
-                processData: false,
-                data: sharingData,
-                type: "POST",
-                contentType: "text/plain; charset=utf-8",
-                complete: function (xhr) {
-                    sharing = false;
-                    if (xhr.status != 200) {
-                        alert("Server error; try again.");
-                        return;
-                    }
-                    if (opts.shareRedirect) {
-                        window.location = opts.shareRedirect + xhr.responseText;
-                    }
-                    var path = "/p/" + xhr.responseText;
-                    var url = origin(window.location) + path;
-
-                    for (var i = 0; i < shareCallbacks.length; i++) {
-                        shareCallbacks[i](url);
-                    }
-                    shareCallbacks = [];
-
-                    if (shareURL) {
-                        shareURL.show().val(url).focus().select();
-
-                        if (rewriteHistory) {
-                            var historyData = { "code": sharingData };
-                            window.history.pushState(historyData, "", path);
-                            pushedEmpty = false;
-                        }
-                    }
-                }
-            });
-        }
-
         $(opts.runEl).click(run);
         $(opts.fmtEl).click(fmt);
-
-        if (opts.shareEl !== null && (opts.shareURLEl !== null || opts.shareRedirect !== null)) {
-            if (opts.shareURLEl) {
-                shareURL = $(opts.shareURLEl).hide();
-            }
-            $(opts.shareEl).click(function () {
-                share();
-            });
-        }
-
-        if (opts.toysEl !== null) {
-            $(opts.toysEl).bind('change', function () {
-                var toy = $(this).val();
-                $.ajax("/doc/play/" + toy, {
-                    processData: false,
-                    type: "GET",
-                    complete: function (xhr) {
-                        if (xhr.status != 200) {
-                            alert("Server error; try again.");
-                            return;
-                        }
-                        setBody(xhr.responseText);
-                    }
-                });
-            });
-        }
     }
 
     window.playground = playground;
