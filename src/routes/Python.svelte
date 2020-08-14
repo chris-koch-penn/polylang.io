@@ -64,25 +64,6 @@
     matches = [...matches].map(a => (a[1] ? a[1] : a[2]));
     matches = [...new Set(matches)];
   }
-
-  function makeEditor() {
-    editor = window.CodeMirror.fromTextArea(editorTA, {
-      theme: "darcula",
-      mode: { name: "python", version: 3, singleLineStringErrors: false },
-      lineNumbers: true,
-      indentUnit: 4,
-      matchBrackets: true
-    });
-    editor.setSize("100%", "100%");
-  }
-
-  function appendPythonHighlightScript() {
-    let el = document.createElement("script");
-    document.head.appendChild(el);
-    el.onload = makeEditor;
-    el.src =
-      "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.55.0/mode/python/python.min.js";
-  }
 </script>
 
 <style lang="scss">

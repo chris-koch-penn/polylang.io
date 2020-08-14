@@ -1,8 +1,9 @@
 <script>
   import NavBar from "../components/NavBar.svelte";
+  import Editor from "../components/Editor.svelte";
   let initialCode =
-    "package main\nfunc main() {\nprintln('Hello, WebAssembly playground!')\n}";
-  let runCode = () => {};
+    'package main\n\nfunc main() {\n\tprintln("Hello, WebAssembly playground!")\n}';
+  let editor;
 </script>
 
 <svelte:head>
@@ -38,7 +39,18 @@
   </div>
 </div> -->
 <NavBar showButtons={true} runCode={false} />
-<div id="wrap">
+<div class="row editor-row">
+  <div class="col-1" />
+  <div class="col-6">
+    <Editor bind:editor language={'go'} {initialCode} />
+  </div>
+  <div class="col-4">
+    <div class="console" id="output" />
+  </div>
+  <div class="col-1" />
+</div>
+
+<!-- <div id="wrap">
   <textarea
     itemprop="description"
     id="code"
@@ -50,4 +62,4 @@
     {initialCode}
   </textarea>
 </div>
-<div id="output" />
+<div id="output" /> -->

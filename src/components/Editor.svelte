@@ -1,21 +1,25 @@
 <script>
   export let editor;
   export let language="";
+  export let initialCode = "";
   let base = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.55.0/"
   let languageHighlightTags = {
     python: "mode/python/python.min.js",
     ruby: "mode/ruby/ruby.min.js",
+    go: "mode/go/go.min.js"
   }
 
   function makeEditor() {
     let textAreaEditor = document.getElementById("textarea-editor");
     editor = window.CodeMirror.fromTextArea(textAreaEditor, {
       theme: "darcula",
-      mode: { name: "python", version: 3, singleLineStringErrors: false },
+      mode: { name: language, version: 3, singleLineStringErrors: false },
       lineNumbers: true,
       indentUnit: 4,
       matchBrackets: true
     });
+    editor.setValue(initialCode);
+    editor.refresh()
     editor.setSize("100%", "100%");
   }
 
