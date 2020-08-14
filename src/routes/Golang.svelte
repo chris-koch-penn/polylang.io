@@ -5,11 +5,7 @@
   let initialCode =
     'package main\n\nfunc main() {\n\tprintln("Hello, WebAssembly playground!")\n}';
   let editor;
-  appendScript(
-    "https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"
-  );
   appendScript("/golang/wasm_exec.js");
-  appendScript("/golang/playground.js");
   appendScript("/golang/golang_main.js");
 
   window.GET_GOLANG_CODE = () => {

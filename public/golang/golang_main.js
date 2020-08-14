@@ -1,40 +1,103 @@
-$(document).ready(function () {
-    if (!WebAssembly || !WebAssembly.instantiate) {
-        $('#run').val('Unsupported Browser');
-        $('#controls input').attr('disabled', true);
-        return;
+// Copyright 2012 The Go Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
+
+// Extensive modifications made by Chris Koch 2020.
+function PlaygroundOutput(el) {
+    'use strict';
+
+    return function (write) {
+        if (write.Kind == 'start') {
+            el.innerHTML = '';
+            return;
+        }
+
+        let cl = 'system';
+        if (write.Kind == 'stdout' || write.Kind == 'stderr')
+            cl = write.Kind;
+
+        let m = write.Body;
+        if (write.Kind == 'end') {
+            m = '\nProgram exited' + (m ? (': ' + m) : '.');
+        }
+
+        if (m.indexOf('IMAGE:') === 0) {
+            // TODO(adg): buffer all writes before creating image
+            let url = 'data:image/png;base64,' + m.substr(6);
+            let img = document.createElement('img');
+            img.src = url;
+            el.appendChild(img);
+            return;
+        }
+
+        // ^L clears the screen.
+        let s = m.split('\x0c');
+        if (s.length > 1) {
+            el.innerHTML = '';
+            m = s.pop();
+        }
+
+        m = m.replace(/&/g, '&amp;');
+        m = m.replace(/</g, '&lt;');
+        m = m.replace(/>/g, '&gt;');
+
+        let span = document.createElement('span');
+        span.className = cl;
+        span.innerHTML = m;
+        el.appendChild(span);
+    };
+}
+
+function playground2(opts) {
+    let transport = opts['transport'];
+    let running;
+    let runBtn = document.getElementById("run");
+    let outputEl = document.getElementById("output");
+    outputEl.innerHTML = "";
+    let node = document.createElement('pre');
+    let output = outputEl.appendChild(node);
+
+    function run() {
+        if (running) running.Kill();
+        running = transport.Run(window.GET_GOLANG_CODE(), PlaygroundOutput(output));
     }
 
-    let cmds = {};
+    runBtn.addEventListener("click", run)
+}
 
-    const exec = (wasm, args) => new Promise((resolve, reject) => {
-        const go = new Go();
-        go.exit = resolve;
-        go.argv = go.argv.concat(args || []);
-        WebAssembly.instantiate(wasm, go.importObject).then((result) => go.run(result.instance)).catch(reject);
-    });
+document.onreadystatechange = async () => {
+    if (document.readyState === 'complete') {
+        if (!WebAssembly || !WebAssembly.instantiate) return alert('Unsupported Browser');
 
-    Promise.all(
-        [
-            '/golang/prebuilt/runtime.a',
-            '/golang/prebuilt/internal/bytealg.a',
-            '/golang/prebuilt/internal/cpu.a',
-            '/golang/prebuilt/runtime/internal/atomic.a',
-            '/golang/prebuilt/runtime/internal/math.a',
-            '/golang/prebuilt/runtime/internal/sys.a',
-        ].map((path) => fetch(path)
-            .then((response) => response.arrayBuffer())
-            .then((buf) => writeToGoFilesystem(path, new Uint8Array(buf)))
-        ).concat(
-            ['compile', 'link', 'gofmt']
-                .map((cmd) => fetch('golang/cmd/' + cmd + '.wasm')
-                    .then((response) => response.arrayBuffer())
-                    .then((buf) => {
+        let cmds = {};
+        const exec = (wasm, args) => new Promise((resolve, reject) => {
+            const go = new Go();
+            go.exit = resolve;
+            go.argv = go.argv.concat(args || []);
+            WebAssembly.instantiate(wasm, go.importObject).then((result) => go.run(result.instance)).catch(reject);
+        });
+
+        await Promise.all(
+            [
+                '/golang/prebuilt/runtime.a',
+                '/golang/prebuilt/internal/bytealg.a',
+                '/golang/prebuilt/internal/cpu.a',
+                '/golang/prebuilt/runtime/internal/atomic.a',
+                '/golang/prebuilt/runtime/internal/math.a',
+                '/golang/prebuilt/runtime/internal/sys.a',
+            ].map(path => fetch(path)
+                .then(response => response.arrayBuffer())
+                .then(buf => writeToGoFilesystem(path, new Uint8Array(buf)))
+            ).concat(
+                ['compile', 'link', 'gofmt']
+                    .map(async cmd => {
+                        let res = await fetch('golang/cmd/' + cmd + '.wasm')
+                        let buf = await res.arrayBuffer();
                         cmds[cmd] = new Uint8Array(buf);
                     })
-                )
+            )
         )
-    ).then(() => {
+
         const decoder = new TextDecoder('utf-8');
         const encoder = new TextEncoder('utf-8');
 
@@ -52,18 +115,13 @@ $(document).ready(function () {
             "packagefile runtime/internal/sys=/golang/prebuilt/runtime/internal/sys.a"
         ));
 
-        playground({
-            codeEl: '#code',
-            outputEl: '#output',
-            runEl: '#run',
-            enableHistory: false,
-            enableShortcuts: true,
+        playground2({
+            outputEl: 'output',
+            runEl: 'run',
             transport: {
                 Run: (body, output) => {
                     if (window && window.GOLANG_EXECUTING) return;
                     window.GOLANG_EXECUTING = true;
-                    $('#run button').attr('disabled', true);
-
                     writeToGoFilesystem('/main.go', body);
                     output({
                         Kind: 'start',
@@ -81,8 +139,6 @@ $(document).ready(function () {
                         });
                     };
 
-                    format();
-
                     exec(cmds['compile'], ['-p', 'main', '-complete', '-dwarf=false', '-pack', '-importcfg', 'importcfg', 'main.go'])
                         .then((code) => code || exec(cmds['link'], ['-importcfg', 'importcfg.link', '-buildmode=exe', 'main.a']))
                         .then((code) => code || exec(readFromGoFilesystem('a.out')))
@@ -99,6 +155,8 @@ $(document).ready(function () {
                             });
                         })
                         .finally(() => window.GOLANG_EXECUTING = false);
+
+                    format();
                     return {
                         Kill: () => { },
                     };
@@ -106,19 +164,13 @@ $(document).ready(function () {
             },
         });
 
-        $('#fmt').show();
-        $('#fmt').click(format);
-        function format() {
+        async function format() {
             writeToGoFilesystem('/main.go', window.GET_GOLANG_CODE());
-            exec(cmds['gofmt'], ['-w', 'main.go'])
-                .then(retVal => {
-                    if (!retVal) {
-                        var fmttedCode = decoder.decode(readFromGoFilesystem('main.go'));
-                        console.log("FMTTED_CODE: ", fmttedCode);
-                        window.SET_GOLANG_CODE(fmttedCode);
-                    }
-                })
-                .finally(() => { });
+            let retVal = await exec(cmds['gofmt'], ['-w', 'main.go']);
+            if (!retVal) {
+                let fmttedCode = decoder.decode(readFromGoFilesystem('main.go'));
+                window.SET_GOLANG_CODE(fmttedCode);
+            }
         }
-    });
-});
+    }
+};
