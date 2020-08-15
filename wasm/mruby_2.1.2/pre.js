@@ -1,5 +1,10 @@
+function redirectOutput(text) {
+    if (!text) text = "\n"
+    let output = window.RUBY_STDOUT ? window.RUBY_STDOUT : "";
+    window.RUBY_STDOUT = output + text;
+}
 var Module = {
-    'print': function (text) { window.RUBY_STDOUT = text; },
-    'printErr': function (text) { window.RUBY_STDOUT = text; },
-    'prettyPrint': function (text) { window.RUBY_STDOUT = text; }
+    'print': redirectOutput,
+    'printErr': redirectOutput,
+    'prettyPrint': redirectOutput
 };

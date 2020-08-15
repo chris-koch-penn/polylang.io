@@ -4,12 +4,14 @@
   import Ruby from "./routes/Ruby.svelte";
   import Golang from "./routes/Golang.svelte";
   import Home from "./routes/Home.svelte";
+  import C from "./routes/C.svelte";
 
   const routes = {
     "/": Home,
     "/python": Python,
     "/ruby": Ruby,
-    "/golang": Golang
+    "/golang": Golang,
+    "/c": C
   };
 </script>
 
@@ -24,15 +26,17 @@
       Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial,
       sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
     font-size: 16px;
+    height: 75vh !important;
   }
 
   :global(.editor-row) {
-    height: 75vh;
+    height: 75vh !important;
   }
   :global(.console) {
     background-color: lightslategrey;
     height: 100%;
     padding: 8px 20px;
+    height: 75vh !important;
   }
   :global(.stdout),
   :global(.stderr),
