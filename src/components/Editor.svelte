@@ -7,7 +7,8 @@
   let languageHighlightTags = {
     python: "mode/python/python.min.js",
     ruby: "mode/ruby/ruby.min.js",
-    go: "mode/go/go.min.js"
+    go: "mode/go/go.min.js",
+    clike: "mode/clike/clike.min.js"
   }
 
   function makeEditor() {
