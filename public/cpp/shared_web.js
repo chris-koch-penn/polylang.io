@@ -62,6 +62,6 @@ class WorkerAPI {
   }
 }
 
-window.CPP = new WorkerAPI();
+// window.CPP = new WorkerAPI();
 
 const run = debounceLazy(editor => window.CPP.compileLinkRun(editor.getValue()), 100);

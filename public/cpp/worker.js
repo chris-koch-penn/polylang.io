@@ -18,8 +18,6 @@ self.importScripts('/cpp/shared.js');
 
 let api;
 let port;
-let canvas;
-let ctx2d;
 
 const apiOptions = {
   async readBuffer(filename) {
@@ -36,22 +34,18 @@ const apiOptions = {
 let currentApp = null;
 
 const onAnyMessage = async event => {
-  switch (event.data.id) {
-    case 'constructor':
-      port = event.data.data;
-      port.onmessage = onAnyMessage;
-      api = new API(apiOptions);
-      break;
-
-    case 'compileLinkRun':
-      if (currentApp) {
-        console.log('First, disallowing rAF from previous app.');
-        // Stop running rAF on the previous app, if any.
-        currentApp.allowRequestAnimationFrame = false;
-      }
-      currentApp = await api.compileLinkRun(event.data.data);
-      console.log(`finished compileLinkRun. currentApp = ${currentApp}.`);
-      break;
+  if (event.data.id === 'constructor') {
+    port = event.data.data;
+    port.onmessage = onAnyMessage;
+    api = new API(apiOptions);
+  }
+  else if (event.data.id === 'compileLinkRun') {
+    if (currentApp) {
+      console.log('First, disallowing rAF from previous app.');
+      currentApp.allowRequestAnimationFrame = false;
+    }
+    currentApp = await api.compileLinkRun(event.data.data);
+    console.log(`Finished compileLinkRun. CurrentApp = ${currentApp}.`);
   }
 };
 
