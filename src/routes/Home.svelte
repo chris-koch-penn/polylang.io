@@ -26,15 +26,9 @@
         "Version 2.1.2 of MRuby. Auto-imports standard libraries. No support for external libraries currently."
     },
     {
-      name: "Ruby",
-      link: "#/ruby",
-      innerHTML:
-        "Version 2.1.2 of MRuby. Auto-imports standard libraries. No support for external libraries currently."
-    },
-    {
       name: "C/C++",
-      link: "#/c",
-      innerHTML: "Clang compiler with C and C++ standard libraries."
+      link: "#/cpp",
+      innerHTML: "Clang compiler 8.0.1 with C and C++ standard libraries."
     }
   ];
 </script>

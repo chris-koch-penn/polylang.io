@@ -4,14 +4,14 @@
   import Ruby from "./routes/Ruby.svelte";
   import Golang from "./routes/Golang.svelte";
   import Home from "./routes/Home.svelte";
-  import C from "./routes/C.svelte";
+  import CPP from "./routes/CPP.svelte";
 
   const routes = {
     "/": Home,
     "/python": Python,
     "/ruby": Ruby,
     "/golang": Golang,
-    "/c": C
+    "/cpp": CPP
   };
 </script>
 

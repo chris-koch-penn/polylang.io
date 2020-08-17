@@ -13,11 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-function sleep(ms) {
-  return new Promise((resolve, _) => setTimeout(resolve, ms));
-}
-
 function readStr(u8, o, len = -1) {
   let str = '';
   let end = u8.length;
@@ -28,34 +23,8 @@ function readStr(u8, o, len = -1) {
   return str;
 }
 
-function debounceLazy(f, ms) {
-  let waiting = 0;
-  let running = false;
-
-  const wait = async () => {
-    ++waiting;
-    await sleep(ms);
-    return --waiting === 0;
-  };
-
-  const wrapped = async (...args) => {
-    if (await wait()) {
-      while (running) await wait();
-      running = true;
-      try {
-        await f(...args);
-      } finally {
-        running = false;
-      }
-    }
-  };
-  return wrapped;
-}
-
 window.CPP_READY = false;
 
-// const API = (function () {
-// window.CPP = (function () {
 class ProcExit extends Error {
   constructor(code) {
     super(`process exited with code ${code}.`);
@@ -81,10 +50,6 @@ function assert(cond) {
   if (!cond) {
     throw new AssertError('assertion failed.');
   }
-}
-
-function getInstance(module, imports) {
-  return WebAssembly.instantiate(module, imports);
 }
 
 function getImportObject(obj, names) {
@@ -243,14 +208,15 @@ class MemFS {
       }
     }
     // For logging
-    // this.hostWrite("Read "+ size + "bytes, pos: "+ this.stdinStrPos + "\n");
+    // this.hostWrite("Read " + size + "bytes, pos: " + this.stdinStrPos + "\n");
     this.hostMem_.write32(nread, size);
     return ESUCCESS;
   }
 
   memfs_log(buf, len) {
     this.mem.check();
-    console.log(this.mem.readStr(buf, len));
+    let out = this.mem.readStr(buf, len);
+    this.hostWrite(e)
   }
 
   copy_out(clang_dst, memfs_src, size) {
@@ -271,8 +237,6 @@ class MemFS {
     dst.set(src);
   }
 }
-
-const RAF_PROC_EXIT_CODE = 0xC0C0A;
 
 class App {
   constructor(module, memfs, name, ...args) {
@@ -304,31 +268,15 @@ class App {
     try {
       this.exports._start();
     } catch (exn) {
-      let writeStack = true;
-      if (exn instanceof ProcExit) {
-        if (exn.code === RAF_PROC_EXIT_CODE) {
-          console.log('Allowing rAF after exit.');
-          return true;
-        }
-        // Don't allow rAF unless you return the right code.
-        console.log(`Disallowing rAF since exit code is ${exn.code}.`);
-        this.allowRequestAnimationFrame = false;
-        if (exn.code == 0) {
-          return false;
-        }
-        writeStack = false;
+      if (exn.code != 0) {
+        // Write error message.
+        let msg = `Error: ${exn.message}\n`;
+        this.memfs.hostWrite(msg)
+        throw exn;
+        // return true;
       }
 
-      // Write error message.
-      let msg = `\x1b[91mError: ${exn.message}`;
-      if (writeStack) {
-        msg = msg + `\n${exn.stack}`;
-      }
-      msg += '\x1b[0m\n';
-      this.memfs.hostWrite(msg);
-
-      // Propagate error.
-      throw exn;
+      return false;
     }
   }
 
@@ -480,7 +428,6 @@ class API {
     this.moduleCache = {};
     this.readBuffer = options.readBuffer;
     this.compileStreaming = options.compileStreaming;
-    this.hostWrite = options.hostWrite;
     this.clangFilename = options.clang || '/cpp/clang';
     this.lldFilename = options.lld || '/cpp/lld';
     this.sysrootFilename = options.sysroot || '/cpp/sysroot.tar';
@@ -492,14 +439,13 @@ class API {
       '-internal-isystem', '/include/c++/v1',
       '-internal-isystem', '/include',
       '-internal-isystem', '/lib/clang/8.0.1/include',
-      '-ferror-limit', '19',
-      '-fmessage-length', '80',
-      '-fcolor-diagnostics',
+      '-ferror-limit', '10',
+      '-fmessage-length', '60'
     ];
 
     this.memfs = new MemFS({
       compileStreaming: this.compileStreaming,
-      hostWrite: this.hostWrite,
+      hostWrite: str => { window.CPP_OUTPUT = window.CPP_OUTPUT ? window.CPP_OUTPUT + str : str; },
       memfsFilename: options.memfs || '/cpp/memfs',
     });
     window.CPP_READY = this.memfs.ready.then(
@@ -549,13 +495,12 @@ class API {
     return await this.run(
       lld, 'wasm-ld', '--no-threads',
       '--export-dynamic',  // TODO required?
-      '-z', `stack-size=${stackSize}`, `-L${libdir}`, crt1, obj, '-lc',
-      '-lc++', '-lc++abi', '-lcanvas', '-o', wasm)
+      '-z', `stack-size=${stackSize}`, `-L${libdir}`, crt1, obj,
+      '-lc', '-lc++', '-lc++abi', '-O0', '-o', wasm)
   }
 
   async run(module, ...args) {
-    console.log(`${args.join(' ')}\n`);
-    // this.hostWrite(`${args.join(' ')}\n`);
+    // console.log(`${args.join(' ')}\n`);
     const app = new App(module, this.memfs, ...args);
     const stillRunning = await app.run();
     return stillRunning ? app : null;
@@ -569,15 +514,11 @@ class API {
     await this.link(obj, wasm);
 
     const buffer = this.memfs.getFileContents(wasm);
-    console.log(`Compiling ${wasm}`);
     const testMod = await WebAssembly.compile(buffer);
     return await this.run(testMod, wasm);
   }
 }
 
-// return API;
-
-// })();
 const apiOptions = {
   async readBuffer(filename) {
     const response = await fetch(filename);
@@ -586,8 +527,7 @@ const apiOptions = {
   async compileStreaming(filename) {
     const response = await fetch(filename);
     return WebAssembly.compile(await response.arrayBuffer());
-  },
-  hostWrite(s) { console.log(s); }
+  }
 };
 
 window.CPP = new API(apiOptions);
