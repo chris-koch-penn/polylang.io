@@ -1,17 +1,21 @@
 <script>
   import Router from "svelte-spa-router";
+  import Home from "./routes/Home.svelte";
   import Python from "./routes/Python.svelte";
   import Ruby from "./routes/Ruby.svelte";
   import Golang from "./routes/Golang.svelte";
-  import Home from "./routes/Home.svelte";
   import CPP from "./routes/CPP.svelte";
+  import Julia from "./routes/Julia.svelte";
+  import Perl from "./routes/Perl.svelte";
 
   const routes = {
     "/": Home,
     "/python": Python,
     "/ruby": Ruby,
     "/golang": Golang,
-    "/cpp": CPP
+    "/cpp": CPP,
+    "/julia": Julia,
+    "/perl": Perl
   };
 </script>
 
@@ -37,6 +41,8 @@
     height: 100%;
     padding: 8px 20px;
     height: 75vh !important;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
   :global(.stdout),
   :global(.stderr),
@@ -46,6 +52,7 @@
     font-size: 15px;
     color: white !important;
     white-space: break-spaces;
+    word-wrap: break-word;
   }
 </style>
 

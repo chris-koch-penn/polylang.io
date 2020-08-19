@@ -4,12 +4,6 @@
   export let language="";
   export let initialCode = "";
   let base = "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.55.0/"
-  let languageHighlightTags = {
-    python: "mode/python/python.min.js",
-    ruby: "mode/ruby/ruby.min.js",
-    go: "mode/go/go.min.js",
-    clike: "mode/clike/clike.min.js"
-  }
 
   function makeEditor() {
     let textAreaEditor = document.getElementById("textarea-editor");
@@ -26,7 +20,7 @@
   }
 
   function appendHighlightScript() {
-    appendScript(base + languageHighlightTags[language], makeEditor)
+    appendScript(base + `mode/${language}/${language}.min.js`, makeEditor)
   }
 </script>
 

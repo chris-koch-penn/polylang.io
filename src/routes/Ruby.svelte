@@ -35,6 +35,7 @@
         ? window.RUBY_STDOUT
         : 'No output. Try writing something valid to "puts".';
       outputConsole.innerHTML = consoleMsg + output + "</xmp>";
+      outputConsole.scrollTop = outputConsole.scrollHeight;
       window.RUBY_STDOUT = "";
     };
   }
@@ -44,7 +45,7 @@
 <div class="row editor-row">
   <div class="col-1" />
   <div class="col-6">
-    <Editor bind:editor language={'python'} />
+    <Editor bind:editor language={'ruby'} />
   </div>
   <div class="col-4">
     <div bind:this={outputConsole} class="console" />

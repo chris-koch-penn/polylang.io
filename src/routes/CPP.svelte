@@ -19,6 +19,7 @@
     } catch {
     } finally {
       outputConsole.innerHTML = consoleMsg + window.CPP_OUTPUT + "</xmp>";
+      outputConsole.scrollTop = outputConsole.scrollHeight;
       window.CPP_OUTPUT = "";
     }
   }

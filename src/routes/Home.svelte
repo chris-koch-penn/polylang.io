@@ -29,6 +29,11 @@
       name: "C/C++",
       link: "#/cpp",
       innerHTML: "Clang compiler 8.0.1 with C and C++ standard libraries."
+    },
+    {
+      name: "Perl",
+      link: "#/perl",
+      innerHTML: "Perl 5 with standard libraries."
     }
   ];
 </script>

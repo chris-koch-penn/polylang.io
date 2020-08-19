@@ -46,6 +46,7 @@
       let clr = "x = sys.stdout.getvalue()\nsys.stdout = io.StringIO()\nx";
       let stdout = pyodide.runPython(clr);
       outputConsole.innerHTML = consoleMsg + stdout + "</xmp>";
+      outputConsole.scrollTop = outputConsole.scrollHeight;
     } catch (err) {
       let lines = err.message
         .split("\n")
