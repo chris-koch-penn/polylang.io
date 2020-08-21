@@ -45,14 +45,14 @@
       pyodide.runPython(editor.getValue());
       let clr = "x = sys.stdout.getvalue()\nsys.stdout = io.StringIO()\nx";
       let stdout = pyodide.runPython(clr);
-      outputConsole.innerHTML = consoleMsg + stdout + "</xmp>";
+      outputConsole.innerHTML = consoleMsg + stdout + "</p>";
       outputConsole.scrollTop = outputConsole.scrollHeight;
     } catch (err) {
       let lines = err.message
         .split("\n")
         .slice(3)
         .join("\n");
-      outputConsole.innerHTML = consoleMsg + lines + "</xmp>";
+      outputConsole.innerHTML = consoleMsg + lines + "</p>";
     }
     executing = false;
   }

@@ -18,7 +18,7 @@
       await window.CPP.compileLinkRun(editor.getValue());
     } catch {
     } finally {
-      outputConsole.innerHTML = consoleMsg + window.CPP_OUTPUT + "</xmp>";
+      outputConsole.innerHTML = consoleMsg + window.CPP_OUTPUT + "</p>";
       outputConsole.scrollTop = outputConsole.scrollHeight;
       window.CPP_OUTPUT = "";
     }

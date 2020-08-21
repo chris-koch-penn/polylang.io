@@ -7,7 +7,7 @@
   appendScript("/perl/webperl.js", () => {
     window.PERL_RUN('print ""'); // Flush buffer.
     window.PERL_OUTPUT_CALLBACK = stdout => {
-      outputConsole.innerHTML = consoleMsg + stdout + "</xmp>";
+      outputConsole.innerHTML = consoleMsg + stdout + "</p>";
       outputConsole.scrollTop = outputConsole.scrollHeight;
     };
   });

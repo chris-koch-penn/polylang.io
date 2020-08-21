@@ -7,7 +7,8 @@
       link: "#/python",
       innerHTML:
         "Includes Numpy, Matplotlib, Pandas, NLTK, Biopython, \
-        SciPy*, NetworkX, and <a href='#' style=>more</a>"
+        SciPy*, NetworkX, and \
+        <a href='https://github.com/iodide-project/pyodide/tree/master/packages' style=>more</a>"
     },
     {
       name: "Julia",
@@ -34,6 +35,11 @@
       name: "Perl",
       link: "#/perl",
       innerHTML: "Perl 5 with standard libraries."
+    },
+    {
+      name: "OCaml",
+      link: "#/ocaml",
+      innerHTML: "OCaml 4.10.0 with standard libraries."
     }
   ];
 </script>
@@ -77,8 +83,13 @@
 <NavBar />
 <div class="row d-flex justify-content-start px-5">
   {#each languages as language}
-    <div class="col-md-4 col-sm-5 col-10 my-4">
-      <div class="card p-3" on:click={() => push(language.link)}>
+    <div class="col-md-4 col-sm-5 col-10 my-4 col-lg-3">
+      <div
+        class="card p-3"
+        on:click={e => {
+          if (e.target.tagName === 'A') return;
+          push(language.link);
+        }}>
         <h5 class="text-center card-title">{language.name}</h5>
         <h6 class="text-center card-subtitle mb-2">
           {@html language.innerHTML}

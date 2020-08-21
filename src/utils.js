@@ -1,5 +1,4 @@
-const consoleMsg =
-    "<xmp class='stdout'>Console output: \n";
+const consoleMsg = "<p class='polylang-stdout'>Console output:\n";
 
 // Adds a script to the head element of the HTML document.
 // This is to circumvent the weird behavior of how Svelte loads JS scripts.

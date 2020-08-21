@@ -34,7 +34,7 @@
       let output = window.RUBY_STDOUT
         ? window.RUBY_STDOUT
         : 'No output. Try writing something valid to "puts".';
-      outputConsole.innerHTML = consoleMsg + output + "</xmp>";
+      outputConsole.innerHTML = consoleMsg + output + "</p>";
       outputConsole.scrollTop = outputConsole.scrollHeight;
       window.RUBY_STDOUT = "";
     };

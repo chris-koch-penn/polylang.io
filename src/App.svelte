@@ -7,6 +7,7 @@
   import CPP from "./routes/CPP.svelte";
   import Julia from "./routes/Julia.svelte";
   import Perl from "./routes/Perl.svelte";
+  import OCaml from "./routes/OCaml.svelte";
 
   const routes = {
     "/": Home,
@@ -15,7 +16,8 @@
     "/golang": Golang,
     "/cpp": CPP,
     "/julia": Julia,
-    "/perl": Perl
+    "/perl": Perl,
+    "/ocaml": OCaml
   };
 </script>
 
@@ -44,7 +46,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
   }
-  :global(.stdout),
+  :global(.polylang-stdout),
   :global(.stderr),
   :global(.system) {
     font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
