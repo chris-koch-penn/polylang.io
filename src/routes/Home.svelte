@@ -13,12 +13,12 @@
     {
       name: "Julia",
       link: "#/julia",
-      innerHTML: "Version 1.04. Only includes standard library currently."
+      innerHTML: "Julia 1.04. Only includes standard library currently."
     },
     {
       name: "Golang",
       link: "#/golang",
-      innerHTML: "Version 1.12. Only includes runtime library currently."
+      innerHTML: "Golang 1.12. Only includes runtime library currently."
     },
     {
       name: "Ruby",
@@ -40,6 +40,11 @@
       name: "OCaml",
       link: "#/ocaml",
       innerHTML: "OCaml 4.10.0 with standard libraries."
+    },
+    {
+      name: "PHP",
+      link: "#/php",
+      innerHTML: "PHP 7.4.5-dev with standard libraries."
     }
   ];
 </script>

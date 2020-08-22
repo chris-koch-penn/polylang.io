@@ -8,6 +8,7 @@
   import Julia from "./routes/Julia.svelte";
   import Perl from "./routes/Perl.svelte";
   import OCaml from "./routes/OCaml.svelte";
+  import PHP from "./routes/PHP.svelte";
 
   const routes = {
     "/": Home,
@@ -17,7 +18,8 @@
     "/cpp": CPP,
     "/julia": Julia,
     "/perl": Perl,
-    "/ocaml": OCaml
+    "/ocaml": OCaml,
+    "/php": PHP
   };
 </script>
 

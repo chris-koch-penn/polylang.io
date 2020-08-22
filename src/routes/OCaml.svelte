@@ -15,6 +15,7 @@
       if (numCalls == 1) return;
       let outputMsg = getOutput(mutations);
       outputConsole.innerHTML = consoleMsg + outputMsg + "</p>";
+      outputConsole.scrollTop = outputConsole.scrollHeight;
     };
     const observer = new MutationObserver(callback);
     observer.observe(hiddenOutputConsole, { childList: true, subtree: true });
