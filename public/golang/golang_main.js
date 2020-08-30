@@ -48,131 +48,112 @@ function PlaygroundOutput(el) {
     };
 }
 
-function playground2(opts) {
-    let transport = opts['transport'];
-    let running;
-    let runBtn = document.getElementById("run");
+function getOutput() {
     let outputEl = document.getElementById("output");
     outputEl.innerHTML = "";
     let node = document.createElement('pre');
     let output = outputEl.appendChild(node);
-
-    function run() {
-        if (running) running.Kill();
-        running = transport.Run(window.GET_GOLANG_CODE(), PlaygroundOutput(output));
-    }
-
-    runBtn.addEventListener("click", run)
+    return PlaygroundOutput(output);
 }
 
-document.onreadystatechange = async () => {
-    if (document.readyState === 'complete') {
-        if (!WebAssembly || !WebAssembly.instantiate) return alert('Unsupported Browser');
 
-        let cmds = {};
-        const exec = (wasm, args) => new Promise((resolve, reject) => {
-            const go = new Go();
-            go.exit = resolve;
-            go.argv = go.argv.concat(args || []);
-            WebAssembly.instantiate(wasm, go.importObject).then((result) => go.run(result.instance)).catch(reject);
-        });
+let init = async () => {
+    let cmds = {};
+    const exec = (wasm, args) => new Promise((resolve, reject) => {
+        const go = new Go();
+        go.exit = resolve;
+        go.argv = go.argv.concat(args || []);
+        WebAssembly.instantiate(wasm, go.importObject).then((result) => go.run(result.instance)).catch(reject);
+    });
 
-        let archivePromises =
-            [
-                '/golang/prebuilt/runtime.a',
-                '/golang/prebuilt/internal/bytealg.a',
-                '/golang/prebuilt/internal/cpu.a',
-                '/golang/prebuilt/runtime/internal/atomic.a',
-                '/golang/prebuilt/runtime/internal/math.a',
-                '/golang/prebuilt/runtime/internal/sys.a',
-            ].map(async path => {
-                let res = await fetch(path);
-                let buf = await res.arrayBuffer();
-                writeToGoFilesystem(path, new Uint8Array(buf))
-            })
-
-        let cmdPromises = ['compile', 'link', 'gofmt'].map(async cmd => {
-            let res = await fetch('golang/cmd/' + cmd + '.wasm')
+    let archivePromises =
+        [
+            '/golang/prebuilt/runtime.a',
+            '/golang/prebuilt/internal/bytealg.a',
+            '/golang/prebuilt/internal/cpu.a',
+            '/golang/prebuilt/runtime/internal/atomic.a',
+            '/golang/prebuilt/runtime/internal/math.a',
+            '/golang/prebuilt/runtime/internal/sys.a',
+        ].map(async path => {
+            let res = await fetch(path);
             let buf = await res.arrayBuffer();
-            cmds[cmd] = new Uint8Array(buf);
+            writeToGoFilesystem(path, new Uint8Array(buf))
         })
 
-        let initPromises = [...archivePromises, ...cmdPromises]
-        await Promise.all(initPromises);
+    let cmdPromises = ['compile', 'link', 'gofmt'].map(async cmd => {
+        let res = await fetch('golang/cmd/' + cmd + '.wasm')
+        let buf = await res.arrayBuffer();
+        cmds[cmd] = new Uint8Array(buf);
+    })
 
-        const decoder = new TextDecoder('utf-8');
-        const encoder = new TextEncoder('utf-8');
+    let initPromises = [...archivePromises, ...cmdPromises]
+    await Promise.all(initPromises);
 
-        writeToGoFilesystem('/importcfg', encoder.encode(
-            "packagefile runtime=/golang/prebuilt/runtime.a"
-        ));
+    const decoder = new TextDecoder('utf-8');
+    const encoder = new TextEncoder('utf-8');
 
-        writeToGoFilesystem('/importcfg.link', encoder.encode(
-            "packagefile command-line-arguments=main.a\n" +
-            "packagefile runtime=/golang/prebuilt/runtime.a\n" +
-            "packagefile internal/bytealg=/golang/prebuilt/internal/bytealg.a\n" +
-            "packagefile internal/cpu=/golang/prebuilt/internal/cpu.a\n" +
-            "packagefile runtime/internal/atomic=/golang/prebuilt/runtime/internal/atomic.a\n" +
-            "packagefile runtime/internal/math=/golang/prebuilt/runtime/internal/math.a\n" +
-            "packagefile runtime/internal/sys=/golang/prebuilt/runtime/internal/sys.a"
-        ));
+    writeToGoFilesystem('/importcfg', encoder.encode(
+        "packagefile runtime=/golang/prebuilt/runtime.a"
+    ));
 
-        playground2({
-            outputEl: 'output',
-            runEl: 'run',
-            transport: {
-                Run: (body, output) => {
-                    if (window && window.GOLANG_EXECUTING) return;
-                    window.GOLANG_EXECUTING = true;
-                    writeToGoFilesystem('/main.go', body);
-                    output({
-                        Kind: 'start',
-                    });
-                    goStderr = (buf) => {
-                        output({
-                            Kind: 'stderr',
-                            Body: decoder.decode(buf),
-                        });
-                    };
-                    goStdout = (buf) => {
-                        output({
-                            Kind: 'stdout',
-                            Body: decoder.decode(buf),
-                        });
-                    };
+    writeToGoFilesystem('/importcfg.link', encoder.encode(
+        "packagefile command-line-arguments=main.a\n" +
+        "packagefile runtime=/golang/prebuilt/runtime.a\n" +
+        "packagefile internal/bytealg=/golang/prebuilt/internal/bytealg.a\n" +
+        "packagefile internal/cpu=/golang/prebuilt/internal/cpu.a\n" +
+        "packagefile runtime/internal/atomic=/golang/prebuilt/runtime/internal/atomic.a\n" +
+        "packagefile runtime/internal/math=/golang/prebuilt/runtime/internal/math.a\n" +
+        "packagefile runtime/internal/sys=/golang/prebuilt/runtime/internal/sys.a"
+    ))
 
-                    exec(cmds['compile'], ['-p', 'main', '-complete', '-dwarf=false', '-pack', '-importcfg', 'importcfg', 'main.go'])
-                        .then((code) => code || exec(cmds['link'], ['-importcfg', 'importcfg.link', '-buildmode=exe', 'main.a']))
-                        .then((code) => code || exec(readFromGoFilesystem('a.out')))
-                        .then((code) => {
-                            output({
-                                Kind: 'end',
-                                Body: code ? 'status ' + code + '.' : undefined,
-                            });
-                        })
-                        .catch((err) => {
-                            output({
-                                Kind: 'end',
-                                Body: 'wasm error: ' + (err.message || 'unknown'),
-                            });
-                        })
-                        .finally(() => window.GOLANG_EXECUTING = false);
-
-                    format();
-                    return {
-                        Kill: () => { },
-                    };
-                },
-            },
+    window.GOLANG_READY();
+    window.RUN_GOLANG = (body) => {
+        let output = getOutput();
+        writeToGoFilesystem('/main.go', body);
+        output({
+            Kind: 'start',
         });
+        goStderr = (buf) => {
+            output({
+                Kind: 'stderr',
+                Body: decoder.decode(buf),
+            });
+        };
+        goStdout = (buf) => {
+            output({
+                Kind: 'stdout',
+                Body: decoder.decode(buf),
+            });
+        };
 
-        async function format() {
-            writeToGoFilesystem('/main.go', window.GET_GOLANG_CODE());
-            let retVal = await exec(cmds['gofmt'], ['-w', 'main.go']);
-            if (!retVal) {
-                let fmttedCode = decoder.decode(readFromGoFilesystem('main.go'));
-                window.SET_GOLANG_CODE(fmttedCode);
-            }
+        exec(cmds['compile'], ['-p', 'main', '-complete', '-dwarf=false', '-pack', '-importcfg', 'importcfg', 'main.go'])
+            .then((code) => code || exec(cmds['link'], ['-importcfg', 'importcfg.link', '-buildmode=exe', 'main.a']))
+            .then((code) => code || exec(readFromGoFilesystem('a.out')))
+            .then((code) => {
+                output({
+                    Kind: 'end',
+                    Body: code ? 'status ' + code + '.' : undefined,
+                });
+            })
+            .catch((err) => {
+                output({
+                    Kind: 'end',
+                    Body: 'wasm error: ' + (err.message || 'unknown'),
+                });
+            })
+            .finally(window.GOLANG_DONE);
+
+        format();
+    }
+
+    async function format() {
+        writeToGoFilesystem('/main.go', window.GET_GOLANG_CODE());
+        let retVal = await exec(cmds['gofmt'], ['-w', 'main.go']);
+        if (!retVal) {
+            let fmttedCode = decoder.decode(readFromGoFilesystem('main.go'));
+            window.SET_GOLANG_CODE(fmttedCode);
         }
     }
-};
+}
+
+init();
