@@ -1,4 +1,5 @@
 <script>
+  import { push } from "svelte-spa-router";
   export let showButtons = false;
   export let runCode;
 </script>
@@ -37,7 +38,7 @@
   rel="stylesheet" />
 
 <div class="row button-row px-5">
-  <div class="col-4 col-md-3 col-lg-2">
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
     <a class="polylang-logo" href="/">polylang.io</a>
   </div>
 
@@ -67,8 +68,10 @@
       </button>
     {/if}
   </div>
-  <div class="d-flex align-items-center col-2 col-md-1" style="margin:auto">
-    <button on:click={runCode} class="btn btn-lg btn-outline-light">
+  <div class="d-flex align-items-center" style="margin:auto">
+    <button
+      on:click={() => push('/support')}
+      class="btn btn-lg btn-outline-light">
       Support
     </button>
   </div>

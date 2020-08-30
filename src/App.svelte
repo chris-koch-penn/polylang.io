@@ -9,6 +9,7 @@
   import Perl from "./routes/Perl.svelte";
   import OCaml from "./routes/OCaml.svelte";
   import PHP from "./routes/PHP.svelte";
+  import Support from "./routes/Support.svelte";
 
   const routes = {
     "/": Home,
@@ -19,7 +20,8 @@
     "/julia": Julia,
     "/perl": Perl,
     "/ocaml": OCaml,
-    "/php": PHP
+    "/php": PHP,
+    "/support": Support
   };
 </script>
 
@@ -34,7 +36,10 @@
       Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial,
       sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
     font-size: 16px;
-    height: 75vh !important;
+    height: 45vh !important;
+    @media (min-width: 576px) {
+      height: 75vh !important;
+    }
   }
 
   :global(.editor-row) {
@@ -44,7 +49,10 @@
     background-color: lightslategrey;
     height: 100%;
     padding: 8px 20px;
-    height: 75vh !important;
+    height: 45vh !important;
+    @media (min-width: 576px) {
+      height: 75vh !important;
+    }
     overflow-y: scroll;
     overflow-x: hidden;
   }

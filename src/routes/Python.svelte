@@ -80,10 +80,10 @@
 </div>
 <div class="row editor-row">
   <div class="col-1" />
-  <div class="col-6">
+  <div class="col-10 col-sm-6 mb-3">
     <Editor bind:editor language={'python'} />
   </div>
-  <div class="col-4">
+  <div class="col-10 col-sm-4 mx-auto">
     <div bind:this={outputConsole} class="console">
       {#if !interpreterHasLoaded || (interpreterHasLoaded && executing)}
         <div
@@ -101,5 +101,5 @@
       {/if}
     </div>
   </div>
-  <div class="col-1" />
+  <div class="col-sm-1" />
 </div>

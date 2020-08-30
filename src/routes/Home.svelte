@@ -8,7 +8,7 @@
       innerHTML:
         "Includes Numpy, Matplotlib, Pandas, NLTK, Biopython, \
         SciPy*, NetworkX, and \
-        <a href='https://github.com/iodide-project/pyodide/tree/master/packages' style=>more</a>"
+        <a href='https://github.com/iodide-project/pyodide/tree/master/packages'>more</a>"
     },
     {
       name: "Julia",
@@ -23,8 +23,7 @@
     {
       name: "Ruby",
       link: "#/ruby",
-      innerHTML:
-        "Version 2.1.2 of MRuby. Auto-imports standard libraries. No support for external libraries currently."
+      innerHTML: "Version 2.1.2 of MRuby. Auto-imports standard libraries."
     },
     {
       name: "C/C++",
@@ -72,16 +71,16 @@
     font-weight: bold;
   }
 
-  // :global is used because @html directive does not apply scoped classes.
-  h6 :global(a),
-  h6 :global(a:active),
-  h6 :global(a:hover) {
-    color: $main-color;
+  // :global is used because @html directive used below does not apply scoped classes.
+  :global(a),
+  :global(a:active),
+  :global(a:hover) {
+    color: $main-color !important;
   }
   .card:hover h6 :global(a),
   .card:hover h6 :global(a:active),
   .card:hover h6 :global(a:hover) {
-    color: white;
+    color: white !important;
   }
 </style>
 

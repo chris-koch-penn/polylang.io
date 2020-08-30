@@ -6,15 +6,18 @@
   let outputConsole, editor;
   let isCompilerloaded = false;
   let outputBuffer = "";
+  let errCalls = 0;
   window.Module = {
     preRun: [],
     noInitialRun: true,
     print: stdout => (outputBuffer += stdout + "\n"),
     printErr: function(text) {
+      errCalls++;
+      if (errCalls == 1) return;
       if (arguments.length > 1) {
         text = Array.prototype.slice.call(arguments).join(" ");
       }
-      console.error(text);
+      outputBuffer += text + "\n";
     },
     postRun: [
       function() {
@@ -40,10 +43,7 @@
   };
 
   function displayOutput() {
-    if (
-      outputBuffer.endsWith("nothing\n")
-      // !outputBuffer.endsWith("nothing\n")
-    ) {
+    if (outputBuffer.endsWith("nothing\n")) {
       outputBuffer = outputBuffer.slice(0, outputBuffer.length - 8);
       outputBuffer += "\nReturn Type: nothing";
     } else {
@@ -61,10 +61,10 @@
 <NavBar showButtons={true} {runCode} />
 <div class="row editor-row">
   <div class="col-1" />
-  <div class="col-6">
+  <div class="col-10 col-sm-6 mb-3">
     <Editor bind:editor language={'julia'} />
   </div>
-  <div class="col-4">
+  <div class="col-10 col-sm-4 mx-auto">
     <div bind:this={outputConsole} class="console">
       {#if !isCompilerloaded}
         <div
@@ -73,12 +73,12 @@
           <div>
             <Spinner />
             <p style="margin-top: 20px;margin-bottom: 20%;">
-              Loading Julia Interpreter
+              Loading Julia Compiler
             </p>
           </div>
         </div>
       {/if}
     </div>
   </div>
-  <div class="col-1" />
+  <div class="col-sm-1" />
 </div>

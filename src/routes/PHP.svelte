@@ -50,11 +50,11 @@
 <NavBar showButtons={true} {runCode} />
 <div class="row editor-row">
   <div class="col-1" />
-  <div class="col-6">
+  <div class="col-10 col-sm-6 mb-3">
     <Editor bind:editor language={'clike'} {initialCode} />
   </div>
-  <div class="col-4">
+  <div class="col-10 col-sm-4 mx-auto">
     <div class="console" bind:this={outputConsole} />
   </div>
-  <div class="col-1" />
+  <div class="col-sm-1" />
 </div>
