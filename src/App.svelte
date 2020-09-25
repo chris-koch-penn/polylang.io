@@ -1,6 +1,7 @@
 <script>
   import Router from "svelte-spa-router";
   import Home from "./routes/Home.svelte";
+  import Python34 from "./routes/Python34.svelte";
   import Python from "./routes/Python.svelte";
   import Ruby from "./routes/Ruby.svelte";
   import Golang from "./routes/Golang.svelte";
@@ -14,6 +15,7 @@
   const routes = {
     "/": Home,
     "/python": Python,
+    "/python34": Python34,
     "/ruby": Ruby,
     "/golang": Golang,
     "/cpp": CPP,

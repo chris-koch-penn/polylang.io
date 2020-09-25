@@ -1,4 +1,7 @@
+import axios from "axios";
 const consoleMsg = "<p class='polylang-stdout'>Console output:\n";
+const apiUrl = IS_PRODUCTION ? "https://polylang.io/api" : "http://localhost:8000/api";
+// Run database locally: dynalite --port 8000
 
 // Adds a script to the head element of the HTML document.
 // This is to circumvent the weird behavior of how Svelte loads JS scripts.
@@ -20,8 +23,36 @@ function until(conditionFunction) {
     return new Promise(poll);
 }
 
+// Create new code snippet in database.
+async function new_snippet(code, lang) {
+    await axios.post(apiUrl,
+        {
+            route: "new_snippet",
+            code: code,
+            lang: lang,
+            org: "",
+            user: "guest"
+        });
+}
+
+// Update code snippet in database provided you have the correct token.
+// The token is a JWT that contains the snippet id and is saved in local storage.
+// This strategy allows guests to later update one of their posts without neeeding an acct.
+async function update_snippet(code, token) {
+    await axios.post(apiUrl,
+        {
+            route: "update_snippet",
+            code: code,
+            token: token
+        });
+}
+
+
 export {
     appendScript,
     until,
-    consoleMsg
+    update_snippet,
+    new_snippet,
+    consoleMsg,
+    apiUrl
 }

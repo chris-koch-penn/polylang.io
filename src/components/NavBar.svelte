@@ -1,7 +1,27 @@
 <script>
+  import { apiUrl } from "../utils.js";
   import { push } from "svelte-spa-router";
   export let showButtons = false;
   export let runCode;
+
+  async function postRequest(url, data) {
+    return await fetch(apiUrl + url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+  }
+
+  async function share() {
+    let res = await postRequest("api/", {
+      route: "new_snippet",
+      hello: "Woorrrrllllddddd."
+    });
+    let data = await res.json();
+    console.log(data);
+  }
 </script>
 
 <style lang="scss">
@@ -62,7 +82,7 @@
         <i class="fa fa-floppy-o" aria-hidden="true" />
         &nbsp;Save
       </button>
-      <button on:click={runCode} class="btn btn-md btn-outline-light">
+      <button on:click={share} class="btn btn-md btn-outline-light">
         <i class="fa fa-paper-plane-o" aria-hidden="true" />
         &nbsp;Share
       </button>

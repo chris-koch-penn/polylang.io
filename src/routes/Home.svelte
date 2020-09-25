@@ -3,6 +3,12 @@
   import NavBar from "../components/NavBar.svelte";
   let languages = [
     {
+      name: "Python 3.4",
+      link: "#/python34",
+      innerHTML:
+        "Loads 50x faster than Python 3.8 on Polylang. Only includes standard libraries."
+    },
+    {
       name: "Python 3.8",
       link: "#/python",
       innerHTML:
