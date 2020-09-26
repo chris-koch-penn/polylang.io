@@ -6,6 +6,8 @@
   let outputConsole, editor;
   let isCompilerloaded = false;
   let outputBuffer = "";
+  let initialCode =
+    "# Some matrix operations are broken currently.\n# We are looking for contributors that can help.\n";
   let errCalls = 0;
   window.Module = {
     preRun: [],
@@ -62,7 +64,7 @@
 <div class="row editor-row">
   <div class="col-1" />
   <div class="col-10 col-sm-6 mb-3">
-    <Editor bind:editor language={'julia'} />
+    <Editor bind:editor language={'julia'} {initialCode} />
   </div>
   <div class="col-10 col-sm-4 mx-auto">
     <div bind:this={outputConsole} class="console">

@@ -5,6 +5,10 @@
   import Editor from "../components/Editor.svelte";
   import Spinner from "../components/Spinner.svelte";
   appendScript("/ocaml/ocaml.js");
+  setTimeout(function() {
+    // This is necessary because sometimes the OCaml interpreter never loads.
+    if (numCalls == 0) location.reload(1);
+  }, 1000);
   let outputConsole, editor, hiddenOutput, textareaInput;
   let numCalls = 0;
 
