@@ -24,21 +24,19 @@ function until(conditionFunction) {
 }
 
 // Create new code snippet in database.
-async function new_snippet(code, lang) {
+async function newSnippet(code, lang) {
     await axios.post(apiUrl,
         {
             route: "new_snippet",
             code: code,
-            lang: lang,
-            org: "",
-            user: "guest"
+            lang: lang
         });
 }
 
 // Update code snippet in database provided you have the correct token.
 // The token is a JWT that contains the snippet id and is saved in local storage.
 // This strategy allows guests to later update one of their posts without neeeding an acct.
-async function update_snippet(code, token) {
+async function updateSnippet(code, token) {
     await axios.post(apiUrl,
         {
             route: "update_snippet",
@@ -51,8 +49,8 @@ async function update_snippet(code, token) {
 export {
     appendScript,
     until,
-    update_snippet,
-    new_snippet,
+    updateSnippet,
+    newSnippet,
     consoleMsg,
     apiUrl
 }

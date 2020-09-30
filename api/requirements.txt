@@ -1,1 +1,3 @@
 sanic==20.6.3
+pynamodb==4.3.3
+PyJWT==1.7.1

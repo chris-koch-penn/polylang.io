@@ -1,91 +1,32 @@
-*Looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+# Polylang.io
+Polylang.io provides free, open-source code playgrounds in 10 programming languages. No account is required, and all playgrounds are shareable. We currently support Python 3.4, Python 3.8 with scientific libraries, Julia, Golang, Ruby, C, C++, Perl, OCaml, and PHP. Check it out at [polylang.io]! See our mission statement and support us [here][polylang.io/#/support]!
 
----
+## The Magic of WebAssembly
+What makes Polylang different from other online code playgrounds is that it runs entirely in your browser - the compiler for the language you are using is a mixture of Javascript and WebAssembly running locally on your computer. There is no server running your code, just your computer and your browser!
 
-# svelte app
+## Deploying and Developing
+The fronted is a static Svelte website and the backend is a Python API using the Sanic framework (check the folder /api for more information). The website is designed to be deployed on Vercel using Python serverless functions with a serverless AWS DynamoDB database. However, other static hosting platforms and serverless platforms would also work.
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
+To develop on the frontend, install the npm dependencies then run `npm run dev`. Check [/api/README.md] for more information about running the backend.
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
+Inside the [/public] folder are static assets including all of the .wasm files that contain the compilers and interpreters needed to run the various languages on Polylang.
 
-```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
-```
+## Todo
+* Use a smaller C compiler. Currently, the Clang/C/C++ wasm files sum to about 50 mb. This takes a long time to load, doesn't fully fit in Vercel's CDN cache (10 mb limit), and uses a lot of bandwidth. There are small C compilers that are around 1 mb or less that would be a better fit for Polylang. [TCC][https://github.com/TinyCC/tinycc] implements C99 and [8cc][https://github.com/rui314/8cc] implements C11. C11 is preferred.
+* Matrix operations in Julia are broken.
+* Certain languages are large. Julia, C++, Golang, and OCaml are roughly 50 mb. I'm open to proposals on the best ways to shrink these. If anyone knows of a smaller C++ compiler than Clang, that would be great.
+* Golang is around 50 mb - this could be brought down by compiling [TinyGo][https://github.com/tinygo-org/tinygo] to WebAssembly.
+* Implement Rust, R, Objective-C, Kotlin, Java, C-Sharp, Haskell.
 
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
+## Inspirations, Acknoledgements, and OSS Projects Used by Polylang
+* [micropython][https://github.com/micropython/micropython/tree/master/ports/javascript]'s javascript port for Python 3.4.
+* [pyodide][https://github.com/iodide-project/pyodide] for Python 3.8 with scientific libraries.
+* [julia-wasm][https://github.com/Keno/julia-wasm] for Julia to WebAssembly compilation.
+* [wasm-go-playground][https://github.com/ccbrown/wasm-go-playground] for Golang to WebAssembly compilation.
+* [mruby][https://github.com/mruby/mruby] for a lightweight version of Ruby.
+* [wasm-clang][https://github.com/binji/wasm-clang] for C/C++ to WebAssembly compilation.
+* [webperl][https://github.com/haukex/webperl] for Perl to WebAssembly compilation.
+* [js-of-OCaml][https://github.com/ocsigen/js_of_ocaml] for compiling the OCaml toplevel to Javascript.
+* [pib][https://github.com/oraoto/pib] for PHP.
+* Related and interesting work: see [compile-to-web][https://github.com/ChristianMurphy/compile-to-web] for languages with LLVM support and Wasm support.
 
-
-## Get started
-
-Install the dependencies...
-
-```bash
-cd svelte-app
-npm install
-```
-
-...then start [Rollup](https://rollupjs.org):
-
-```bash
-npm run dev
-```
-
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
-
-By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
-
-
-## Building and running in production mode
-
-To create an optimised version of the app:
-
-```bash
-npm run build
-```
-
-You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
-
-
-## Single-page app mode
-
-By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
-
-If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
-
-```js
-"start": "sirv public --single"
-```
-
-
-## Deploying to the web
-
-### With [Vercel](https://vercel.com)
-
-Install `vercel` if you haven't already:
-
-```bash
-npm install -g vercel
-```
-
-Then, from within your project folder:
-
-```bash
-cd public
-vercel deploy --name my-project
-```
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public my-project.surge.sh
-```

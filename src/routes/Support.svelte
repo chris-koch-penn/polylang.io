@@ -1,10 +1,6 @@
 <script>
   import NavBar from "../components/NavBar.svelte";
   let githubUrl = "https://github.com/chris-koch-penn/polylang.git";
-  // function drawKofi() {
-  //   kofiwidget2.init("Support us on Ko-fi", "#cfbff7", "D1D2248NX");
-  //   kofiwidget2.draw();
-  // }
 </script>
 
 <style lang="scss">
@@ -56,12 +52,11 @@
     <br />
     One way to contribute would be a monetary donation through our
     <a href="https://ko-fi.com/polylang">Ko-fi page</a>
-    or by clicking the "Donate" button below. We plan on using the funding to
-    pay for server and dev costs, but also for incentives to help us implement
-    new language playgrounds for Rust, NodeJS, Objective-C, Kotlin, Java,
-    C-Sharp, Haskell, R, and more. If you donate, make sure to include your
-    favorite language in the donation message! This will help us prioritize
-    which languages to add next.
+    or by clicking the "Donate" button below. We plan on using the funding for
+    dev costs, and for incentives to help us implement new language playgrounds
+    for Rust, NodeJS, Objective-C, Kotlin, Java, C-Sharp, Haskell, R, and more.
+    If you donate, make sure to include your favorite language in the donation
+    message! This will help us prioritize which languages to add next.
     <br />
     <br />
     Secondly, as an open source project, we have a
@@ -70,6 +65,12 @@
     and Webassembly experience, or would like to learn, you'd be a good fit!
     Every language on Polylang is run completely in the browser using Wasm or by
     transpilation to JS.
+    <br />
+    <br />
+    Lastly, I have a freelance development company called
+    <a href="https://computesy.dev" target="_blank">Computesy</a>
+    - if you or anyone you know needs an enterprise mobile app, website, or
+    AI/ML tool developed, contact us!
   </p>
   <div class="row d-flex justify-content-center">
     <div class="col-md-4 col-12 mt-3 d-flex justify-content-center">

@@ -1,4 +1,4 @@
 /node_modules/
 /public/build/
-
+__pycache__
 .DS_Store
