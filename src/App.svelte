@@ -14,16 +14,16 @@
 
   const routes = {
     "/": Home,
-    "/python": Python,
-    "/python34": Python34,
-    "/ruby": Ruby,
-    "/golang": Golang,
-    "/cpp": CPP,
-    "/julia": Julia,
-    "/perl": Perl,
-    "/ocaml": OCaml,
-    "/php": PHP,
-    "/support": Support
+    "/python/:id?": Python,
+    "/python34/:id?": Python34,
+    "/ruby/:id?": Ruby,
+    "/golang/:id?": Golang,
+    "/cpp/:id?": CPP,
+    "/julia/:id?": Julia,
+    "/perl/:id?": Perl,
+    "/ocaml/:id?": OCaml,
+    "/php/:id?": PHP,
+    "/support/:id?": Support
   };
 </script>
 

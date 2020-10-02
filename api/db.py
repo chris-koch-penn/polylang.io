@@ -46,11 +46,10 @@ def create_code_snippet(snippet_id, code, owner, lang, org, private):
 
 def update_code_snippet(snippet_id, code):
     code_snippet = CodeTable.get(snippet_id)
-    code_snippet.update(actions=[ code_snippet.code.set(code) ])
+    code_snippet.update(actions=[ CodeTable.code.set(code) ])
 
 def get_code_snippet(snippet_id):
-    code_snippet = CodeTable.get(snippet_id)
-    code_snippet.update(actions=[ code_snippet.code.set(code) ])
+    return CodeTable.get(snippet_id)
 
 if not CodeTable.exists():
     CodeTable.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)

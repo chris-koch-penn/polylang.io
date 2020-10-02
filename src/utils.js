@@ -1,6 +1,6 @@
 import axios from "axios";
 const consoleMsg = "<p class='polylang-stdout'>Console output:\n";
-const apiUrl = IS_PRODUCTION ? "https://polylang.io/api" : "http://localhost:8000/api";
+const apiUrl = IS_PRODUCTION ? "https://polylang.io/api" : "http://localhost:9000/api";
 // Run database locally: dynalite --port 8000
 
 // Adds a script to the head element of the HTML document.
@@ -11,6 +11,7 @@ function appendScript(src, loadCallback) {
     el.onload = loadCallback;
     el.src = src;
 }
+
 
 // Resolve promise by checking every 75 milliseconds until condition 
 // callback evalutates true.
@@ -24,20 +25,23 @@ function until(conditionFunction) {
 }
 
 // Create new code snippet in database.
-async function newSnippet(code, lang) {
-    await axios.post(apiUrl,
+function newSnippet(code, lang) {
+    return axios.post(apiUrl,
         {
             route: "new_snippet",
             code: code,
-            lang: lang
+            lang: lang,
+            owner: "guest",
+            org: "",
+            private: false
         });
 }
 
 // Update code snippet in database provided you have the correct token.
 // The token is a JWT that contains the snippet id and is saved in local storage.
 // This strategy allows guests to later update one of their posts without neeeding an acct.
-async function updateSnippet(code, token) {
-    await axios.post(apiUrl,
+function updateSnippet(code, token) {
+    return axios.post(apiUrl,
         {
             route: "update_snippet",
             code: code,
@@ -45,12 +49,16 @@ async function updateSnippet(code, token) {
         });
 }
 
+function getSnippet(snippet_id) {
+    return axios.post(apiUrl, { route: "get_snippet", snippet_id: snippet_id });
+}
 
 export {
     appendScript,
     until,
     updateSnippet,
     newSnippet,
+    getSnippet,
     consoleMsg,
     apiUrl
 }

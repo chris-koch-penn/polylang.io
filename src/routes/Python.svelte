@@ -74,7 +74,7 @@
 
 </style>
 
-<NavBar showButtons={true} {runCode} />
+<NavBar showButtons={true} {runCode} lang="python" {editor} />
 <div class="row d-flex justify-content-center">
   <div bind:this={canvas} />
 </div>

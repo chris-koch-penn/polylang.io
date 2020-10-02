@@ -29,7 +29,7 @@
 
 </style>
 
-<NavBar showButtons={true} {runCode} />
+<NavBar showButtons={true} {runCode} lang="python34" {editor} />
 <div class="row editor-row">
   <div class="col-1" />
   <div class="col-10 col-sm-6 mb-3">

@@ -4,12 +4,11 @@ To install dependencies:
 `pip install -r requirements.txt`
 To run the database you must install Dynalite first with:
 `npm install -g dynalite`
-then run
-`dynalite --port 8000`
-
-# Running
-To start the server in development mode:
-`python index.py DEV`.
+then in the main directory run 
+`npm run db`
+`npm run server`
+`npm run dev`
+in three seperate terminals to start the database, the server, and the frontend.
 
 # Structure
 All http requests are POST requests directed through one serverless function handler and one endpoint ("api/") to avoid cold starts and simplify deployment

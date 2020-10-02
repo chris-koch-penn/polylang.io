@@ -1,38 +1,43 @@
 from db import CodeTable, get_code_snippet, update_code_snippet, create_code_snippet
 from sanic import Sanic
 from sanic.response import json
-import sys
+from flask import Flask, Response, jsonify, request
+from flask_cors import CORS
 import jwt
 import os
-IS_DEV = len(sys.argv) >= 2 and sys.argv[1] == "DEV"
+from uuid import uuid4
 
-app = Sanic(name="Polylang")
+app = Flask("Polylang")
+CORS(app)
 
-@app.post('/api')
-async def index(request, path=""):
+@app.route('/')
+@app.route('/api', methods=["GET", "POST"])
+def index():
     params = request.json
+    if not params: return "JSON error"
+    print(params)
     route = params.get("route")
-    print(params)
     if route == "get_snippet":
-        return await get_snippet(params)
+        snippet = get_code_snippet(params['snippet_id'])
+        return snippet.to_dict()
     elif route == "new_snippet":
-        return await new_snippet(params)
+        return new_snippet(params)
     elif route == "update_snippet":
-        return await update_snippet(params)
-    else:
-        return json({'Error': "Route not found."})
+        return update_snippet(params)
+    return jsonify({'Error': "Route not found."})
 
-async def new_snippet(params):
-    print(params)
-    return json({'hello': params})
+def new_snippet(params):
+    uid = str(uuid4()).replace('-', '')
+    token = createJWT(uid)
+    create_code_snippet(uid, params["code"], params["owner"], params["lang"], 
+                        params["org"], params["private"])
+    return { "id": uid, "token": token }
 
-async def update_snippet(params):
-    print(params)
-    return json({'hello': params})
-
-async def get_snippet(params):
-    print(params)
-    return json({'hello': params})
+def update_snippet(params):
+    snippet_id = decodeJWT(params["token"])['snippet_id']
+    print(snippet_id)
+    update_code_snippet(snippet_id, params["code"])
+    return "Success"
 
 def createJWT(snippet_id):
     """Create and sign a JWT for guest's to store in their browser.
@@ -42,8 +47,6 @@ def createJWT(snippet_id):
     jwt_res = jwt.encode({"snippet_id": snippet_id}, key, algorithm='HS256')
     return jwt_res.decode("utf-8")
 
-
-if IS_DEV:
-    from sanic_cors import CORS
-    CORS(app)
-    app.run(host="localhost", port=8000, debug=True)
+def decodeJWT(token):
+    key = os.environ.get("JWT_SECRET_KEY", "fake_key")
+    return jwt.decode(token, key, algorithms=['HS256'])
