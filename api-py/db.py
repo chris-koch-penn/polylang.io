@@ -1,8 +1,7 @@
 from pynamodb.models import Model
-from pynamodb.attributes import (JSONAttribute, UnicodeAttribute, 
+from pynamodb.attributes import (UnicodeAttribute, 
 UTCDateTimeAttribute, UnicodeSetAttribute, BooleanAttribute)
 from datetime import datetime as date
-from uuid import uuid4
 import os
 
 class Model2(Model):
@@ -51,5 +50,5 @@ def update_code_snippet(snippet_id, code):
 def get_code_snippet(snippet_id):
     return CodeTable.get(snippet_id)
 
-if not CodeTable.exists():
-    CodeTable.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
+# if not CodeTable.exists():
+#     CodeTable.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)

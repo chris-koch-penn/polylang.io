@@ -1,7 +1,5 @@
-from db import CodeTable, get_code_snippet, update_code_snippet, create_code_snippet
-from sanic import Sanic
-from sanic.response import json
-from flask import Flask, Response, jsonify, request
+from _utils.db import get_code_snippet, update_code_snippet, create_code_snippet
+from flask import Flask, request
 from flask_cors import CORS
 import jwt
 import os
@@ -24,7 +22,7 @@ def index():
         return new_snippet(params)
     elif route == "update_snippet":
         return update_snippet(params)
-    return jsonify({'Error': "Route not found."})
+    return {'Error': "Route not found."}
 
 def new_snippet(params):
     uid = str(uuid4()).replace('-', '')

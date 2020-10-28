@@ -1,5 +1,5 @@
 # Requirements
-Vercel, the serverless runtime this app will be deployed on, uses Python 3.6 currently.
+The serverless runtime this app will be deployed on uses Python 3.8 currently.
 To install dependencies:
 `pip install -r requirements.txt`
 To run the database you must install Dynalite first with:

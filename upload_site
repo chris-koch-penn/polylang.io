@@ -1,0 +1,4 @@
+#!/bin/zsh
+npm run build
+source ../../serverless-datascience/.env
+python ../../serverless-datascience/src/main.py topnotch.rocks ./public
