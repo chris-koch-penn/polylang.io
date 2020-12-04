@@ -1,5 +1,5 @@
 # Polylang.io
-Polylang.io provides free, open-source code playgrounds in 10 programming languages. No account is required, and all playgrounds are shareable. We currently support Python 3.4, Python 3.8 with scientific libraries, Julia, Golang, Ruby, C, C++, Perl, OCaml, and PHP. Check it out at [polylang.io](polylang.io)! See our mission statement and support us [here](polylang.io/#/support)!
+Polylang.io provides free, open-source code playgrounds in 10 programming languages. No account is required, and all playgrounds are shareable. We currently support Python 3.4, Python 3.8 with scientific libraries, Julia, Golang, Ruby, C, C++, Perl, OCaml, and PHP. Check it out at [polylang.io](https://polylang.io)! See our mission statement and support us [here](https://polylang.io/#/support)!
 
 ## The Magic of WebAssembly
 What makes Polylang different from other online code playgrounds is that it runs entirely in your browser - the compiler for the language you are using is a mixture of Javascript and WebAssembly running locally on your computer. There is no server running your code, just your computer and your browser!
@@ -31,6 +31,6 @@ Inside the [/wasm](./wasm) folder are static assets including most of the .wasm 
 * Related and interesting work: see [compile-to-web](https://github.com/ChristianMurphy/compile-to-web) for languages with LLVM support and Wasm support.
 
 # License
-Polylang is free for anyone to use at [polylang.io](polylang.io).
+Polylang is free for anyone to use at [polylang.io](https://polylang.io).
 
 The license for Polylang's codebase is the GPLv3 license. Additionally, each language offered by Polylang is typically licensed with the same license that the language's compiler or interpreter uses. I would have loved to do the MIT license but some of the Polylang languages use a GPL license, so it made sense to chose something compatible.
