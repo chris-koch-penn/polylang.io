@@ -66,11 +66,6 @@
     Every language on Polylang is run completely in the browser using Wasm or by
     transpilation to JS.
     <br />
-    <br />
-    Lastly, I have a freelance development company called
-    <a href="https://computesy.dev" target="_blank">Computesy</a>
-    - if you or anyone you know needs an enterprise mobile app, website, or
-    AI/ML tool developed, contact us!
   </p>
   <div class="row d-flex justify-content-center">
     <div class="col-md-4 col-12 mt-3 d-flex justify-content-center">

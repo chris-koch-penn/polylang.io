@@ -1,0 +1,15 @@
+{
+    "name": "@polylang.io/ruby",
+    "version": "1.0.0",
+    "description": "Run Ruby in the browser! WASM compiled version of mruby 2.1.2.",
+    "license": "MIT",
+    "repository": "chris-koch-penn/polylang",
+    "main": "index.js",
+    "keywords": [
+        "ruby",
+        "wasm",
+        "webassembly",
+        "browser",
+        "polylang"
+    ]
+}

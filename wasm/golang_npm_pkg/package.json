@@ -1,0 +1,15 @@
+{
+    "name": "@polylang.io/golang",
+    "version": "1.0.0",
+    "description": "Run Golang in the browser! WASM compiled version of Golang 1.12.",
+    "license": "MIT",
+    "repository": "chris-koch-penn/polylang",
+    "main": "golang_main.js",
+    "keywords": [
+        "golang",
+        "wasm",
+        "webassembly",
+        "browser",
+        "polylang"
+    ]
+}
