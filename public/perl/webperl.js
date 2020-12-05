@@ -162,7 +162,7 @@ Perl.init = function (readyCallback) {
 		locateFile: function (file) {
 			var wasmRe = /\.(wast|wasm|asm\.js|data)$/;
 			if (wasmRe.exec(file))
-				return "/perl/" + file;
+				return "https://cdn.jsdelivr.net/npm/@chriskoch/perl-wasm/" + file;
 			return file;
 		},
 	};
@@ -180,7 +180,7 @@ Perl.init = function (readyCallback) {
 	console.debug("Perl: Fetching Emscripten/Perl...");
 	var script = document.createElement('script');
 	script.async = true; script.defer = true;
-	script.src = "./emperl.js";
+	script.src = "https://cdn.jsdelivr.net/npm/@chriskoch/perl-wasm/emperl.js";
 	document.getElementsByTagName('head')[0].appendChild(script);
 };
 

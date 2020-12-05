@@ -1,5 +1,5 @@
 {
-    "name": "@polylang.io/php",
+    "name": "@chriskoch/php-wasm",
     "version": "1.0.0",
     "description": "Run PHP in the browser! WASM compiled version of PHP 7.4.5.",
     "license": "Apache-2.0",

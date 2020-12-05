@@ -1,5 +1,5 @@
 {
-    "name": "@polylang.io/perl",
+    "name": "@chriskoch/perl-wasm",
     "version": "1.0.0",
     "description": "Run Perl in the browser! WASM compiled version of Perl 5.",
     "license": "GPLv1 or Perl Artistic License",

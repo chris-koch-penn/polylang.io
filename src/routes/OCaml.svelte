@@ -4,19 +4,15 @@
   import NavBar from "../components/NavBar.svelte";
   import Editor from "../components/Editor.svelte";
   import Spinner from "../components/Spinner.svelte";
-  appendScript("/ocaml/ocaml.js");
-  setTimeout(function() {
-    // This is necessary because sometimes the OCaml interpreter never loads.
-    if (numCalls == 0) location.reload(1);
-  }, 1000);
+  let url = "https://cdn.jsdelivr.net/npm/@chriskoch/ocaml-wasm";
+  appendScript(url);
   let outputConsole, editor, hiddenOutput, textareaInput;
+  let initialCode = 'open Format\nprintf "Hello World"';
   let numCalls = 0;
 
   onMount(() => {
     const hiddenOutputConsole = document.getElementById("output");
     const callback = function(mutations, observer) {
-      numCalls++;
-      if (numCalls == 1) return;
       let outputMsg = getOutput(mutations);
       outputConsole.innerHTML = consoleMsg + outputMsg + "</p>";
       outputConsole.scrollTop = outputConsole.scrollHeight;
@@ -43,7 +39,6 @@
   }
 
   let runCode = () => {
-    if (numCalls == 0) return;
     let code = editor.getValue();
     code = code.split("\n").join(";; ");
     textareaInput.value = code;
@@ -62,7 +57,7 @@
 <div class="row editor-row">
   <div class="col-1" />
   <div class="col-10 col-sm-6 mb-3">
-    <Editor bind:editor language={'mllike'} />
+    <Editor bind:editor language={'mllike'} {initialCode} />
   </div>
   <div class="col-10 col-sm-4 mx-auto">
     <div bind:this={outputConsole} class="console" id="console">

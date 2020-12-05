@@ -1,5 +1,5 @@
 {
-    "name": "@polylang.io/ocaml",
+    "name": "@chriskoch/ocaml-wasm",
     "version": "1.0.0",
     "description": "Run OCaml in the browser! JS transpiled version of OCaml 4.10.0.",
     "license": "GPLv2",
