@@ -1,0 +1,15 @@
+{
+    "name": "@polylang.io/ocaml",
+    "version": "1.0.0",
+    "description": "Run OCaml in the browser! JS transpiled version of OCaml 4.10.0.",
+    "license": "GPLv2",
+    "repository": "chris-koch-penn/polylang",
+    "main": "ocaml.js",
+    "keywords": [
+        "ocaml",
+        "wasm",
+        "webassembly",
+        "browser",
+        "polylang"
+    ]
+}

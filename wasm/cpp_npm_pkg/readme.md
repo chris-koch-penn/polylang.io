@@ -1,0 +1,2 @@
+# Polylang.io: Free, shareable codepens in dozens of languages
+Run C/C++ in the browser! This package contains a WASM compiled version of the Clang 8.0.1 compiler with standard C and C++ libraries. This package was created for the open source project [polylang.io](https://polylang.io).

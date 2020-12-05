@@ -8,6 +8,8 @@
   let outputBuffer = "";
   let initialCode =
     "# Some matrix operations are broken currently.\n# We are looking for contributors that can help.\n";
+  // let url = "https://cdn.jsdelivr.net/npm/@chriskoch/julia-wasm@1.0.4";
+  let url = "/julia/julia.js";
   let errCalls = 0;
   window.Module = {
     preRun: [],
@@ -34,7 +36,7 @@
       }
     ]
   };
-  appendScript("/julia/julia.js");
+  appendScript(url);
 
   let runCode = () => {
     let code = editor.getValue();

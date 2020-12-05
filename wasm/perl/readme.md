@@ -1,0 +1,2 @@
+# Polylang.io: Free, shareable codepens in dozens of languages
+Run Perl in the browser! This package contains a WASM compiled version of the Perl 5 interpreter. This package was created for the open source project [polylang.io](https://polylang.io).

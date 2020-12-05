@@ -1,0 +1,17 @@
+{
+    "name": "@polylang.io/micropython-wasm",
+    "version": "1.0.0",
+    "description": "Run Micropython in the browser! WASM compiled version of Micropython (Python 3.4 implementation).",
+    "license": "MIT",
+    "repository": "chris-koch-penn/polylang",
+    "main": "micropython.js",
+    "keywords": [
+        "micropython",
+        "python",
+        "python3.4",
+        "wasm",
+        "webassembly",
+        "browser",
+        "polylang"
+    ]
+}

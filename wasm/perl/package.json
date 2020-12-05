@@ -1,0 +1,15 @@
+{
+    "name": "@polylang.io/perl",
+    "version": "1.0.0",
+    "description": "Run Perl in the browser! WASM compiled version of Perl 5.",
+    "license": "GPLv1 or Perl Artistic License",
+    "repository": "chris-koch-penn/polylang",
+    "main": "webperl.js",
+    "keywords": [
+        "perl",
+        "wasm",
+        "webassembly",
+        "browser",
+        "polylang"
+    ]
+}

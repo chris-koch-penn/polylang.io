@@ -1,6 +1,6 @@
 <script>
   import NavBar from "../components/NavBar.svelte";
-  let githubUrl = "https://github.com/chris-koch-penn/polylang.git";
+  let githubUrl = "https://github.com/chris-koch-penn/polylang";
 </script>
 
 <style lang="scss">

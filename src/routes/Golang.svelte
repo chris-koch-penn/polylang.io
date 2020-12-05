@@ -9,8 +9,9 @@
   let initialCode =
     'package main\n\nfunc main() {\n\tprintln("Hello, WebAssembly playground!")\n}';
   let editor;
-  appendScript("/golang/wasm_exec.js");
-  appendScript("/golang/golang_main.js");
+  let url = "https://cdn.jsdelivr.net/npm/@chriskoch/golang-wasm@1.0.0";
+  appendScript(url + "/wasm_exec.js");
+  appendScript(url + "/golang_main.js");
 
   let runCode = () => {
     if (isExecuting || !isCompilerReady) return;

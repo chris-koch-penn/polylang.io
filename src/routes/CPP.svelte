@@ -6,8 +6,10 @@
   let outputConsole;
   let editor;
   let isCompilerReady = false;
+  let isExecuting = false;
   let CProgram = `#include <iostream>\n\nint main() {\n\tstd::cout << "Hello World!";\n\treturn 0;\n}`;
-  appendScript("/cpp/shared.js", async () => {
+  let url = "https://cdn.jsdelivr.net/npm/@chriskoch/cpp-wasm@1.0.1";
+  appendScript(url, async () => {
     await window.CPP_READY;
     isCompilerReady = true;
   });
@@ -15,9 +17,11 @@
 
   async function runCode() {
     try {
+      isExecuting = true;
       await window.CPP.compileLinkRun(editor.getValue());
     } catch {
     } finally {
+      isExecuting = false;
       outputConsole.innerHTML = consoleMsg + window.CPP_OUTPUT + "</p>";
       outputConsole.scrollTop = outputConsole.scrollHeight;
       window.CPP_OUTPUT = "";
@@ -32,7 +36,20 @@
     <Editor bind:editor language={'clike'} {initialCode} />
   </div>
   <div class="col-10 col-sm-4 mx-auto">
-    <div bind:this={outputConsole} class="console" />
+    <div bind:this={outputConsole} class="console">
+      {#if !isCompilerReady}
+        <div
+          class="d-flex justify-content-center align-items-center"
+          style="height:100%">
+          <div>
+            <Spinner />
+            <p style="margin-top: 20px;margin-bottom: 20%;">
+              Loading Clang Compiler
+            </p>
+          </div>
+        </div>
+      {/if}
+    </div>
   </div>
   <div class="col-sm-1" />
 </div>

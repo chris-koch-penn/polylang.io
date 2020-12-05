@@ -1,8 +1,8 @@
 {
-    "name": "@polylang.io/golang",
+    "name": "@chriskoch/golang-wasm",
     "version": "1.0.0",
-    "description": "Run Golang in the browser! WASM compiled version of Golang 1.12.",
-    "license": "MIT",
+    "description": "Run Golang in the browser! WASM compiled version of the Golang 1.12 compiler.",
+    "license": "Apache-2.0",
     "repository": "chris-koch-penn/polylang",
     "main": "golang_main.js",
     "keywords": [

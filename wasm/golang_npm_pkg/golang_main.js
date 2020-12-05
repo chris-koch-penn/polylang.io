@@ -3,6 +3,8 @@
 // license that can be found in the LICENSE file.
 
 // Extensive modifications made by Chris Koch, 2020.
+let url = "https://cdn.jsdelivr.net/npm/@chriskoch/golang-wasm@1.0.0";
+
 function PlaygroundOutput(el) {
     'use strict';
 
@@ -68,20 +70,20 @@ let init = async () => {
 
     let archivePromises =
         [
-            './prebuilt/runtime.a',
-            './prebuilt/internal/bytealg.a',
-            './prebuilt/internal/cpu.a',
-            './prebuilt/runtime/internal/atomic.a',
-            './prebuilt/runtime/internal/math.a',
-            './prebuilt/runtime/internal/sys.a',
+            '/prebuilt/runtime.a',
+            '/prebuilt/internal/bytealg.a',
+            '/prebuilt/internal/cpu.a',
+            '/prebuilt/runtime/internal/atomic.a',
+            '/prebuilt/runtime/internal/math.a',
+            '/prebuilt/runtime/internal/sys.a',
         ].map(async path => {
-            let res = await fetch(path);
+            let res = await fetch(url + path);
             let buf = await res.arrayBuffer();
-            writeToGoFilesystem(path, new Uint8Array(buf))
+            writeToGoFilesystem('/golang' + path, new Uint8Array(buf))
         })
 
     let cmdPromises = ['compile', 'link', 'gofmt'].map(async cmd => {
-        let res = await fetch('./cmd/' + cmd + '.wasm')
+        let res = await fetch(url + '/cmd/' + cmd + '.wasm')
         let buf = await res.arrayBuffer();
         cmds[cmd] = new Uint8Array(buf);
     })
@@ -93,17 +95,17 @@ let init = async () => {
     const encoder = new TextEncoder('utf-8');
 
     writeToGoFilesystem('/importcfg', encoder.encode(
-        "packagefile runtime=./prebuilt/runtime.a"
+        "packagefile runtime=/golang/prebuilt/runtime.a"
     ));
 
     writeToGoFilesystem('/importcfg.link', encoder.encode(
         "packagefile command-line-arguments=main.a\n" +
-        "packagefile runtime=./prebuilt/runtime.a\n" +
-        "packagefile internal/bytealg=./prebuilt/internal/bytealg.a\n" +
-        "packagefile internal/cpu=./prebuilt/internal/cpu.a\n" +
-        "packagefile runtime/internal/atomic=./prebuilt/runtime/internal/atomic.a\n" +
-        "packagefile runtime/internal/math=./prebuilt/runtime/internal/math.a\n" +
-        "packagefile runtime/internal/sys=./prebuilt/runtime/internal/sys.a"
+        "packagefile runtime=/golang/prebuilt/runtime.a\n" +
+        "packagefile internal/bytealg=/golang/prebuilt/internal/bytealg.a\n" +
+        "packagefile internal/cpu=/golang/prebuilt/internal/cpu.a\n" +
+        "packagefile runtime/internal/atomic=/golang/prebuilt/runtime/internal/atomic.a\n" +
+        "packagefile runtime/internal/math=/golang/prebuilt/runtime/internal/math.a\n" +
+        "packagefile runtime/internal/sys=/golang/prebuilt/runtime/internal/sys.a"
     ))
 
     window.GOLANG_READY();
