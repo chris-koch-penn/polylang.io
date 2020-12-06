@@ -1,6 +1,6 @@
 {
     "name": "@chriskoch/cpp-wasm",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Run C/C++ in the browser! WASM compiled version of the Clang 8.0.1 compiler.",
     "license": "Apache-2.0",
     "repository": "chris-koch-penn/polylang",

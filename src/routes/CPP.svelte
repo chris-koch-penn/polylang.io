@@ -8,7 +8,7 @@
   let isCompilerReady = false;
   let isExecuting = false;
   let CProgram = `#include <iostream>\n\nint main() {\n\tstd::cout << "Hello World!";\n\treturn 0;\n}`;
-  let url = "https://cdn.jsdelivr.net/npm/@chriskoch/cpp-wasm@1.0.1";
+  let url = "https://cdn.jsdelivr.net/npm/@chriskoch/cpp-wasm";
   appendScript(url, async () => {
     await window.CPP_READY;
     isCompilerReady = true;

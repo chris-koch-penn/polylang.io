@@ -447,7 +447,7 @@ class API {
     this.memfs = new MemFS({
       compileStreaming: this.compileStreaming,
       hostWrite: str => { window.CPP_OUTPUT = window.CPP_OUTPUT ? window.CPP_OUTPUT + str : str; },
-      memfsFilename: options.memfs || '/cpp/memfs',
+      memfsFilename: options.memfs || 'https://cdn.jsdelivr.net/npm/@chriskoch/cpp-wasm/memfs',
     });
     window.CPP_READY = this.memfs.ready.then(
       () => { return this.untar(this.memfs, this.sysrootFilename); });

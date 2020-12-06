@@ -4,21 +4,31 @@
   import NavBar from "../components/NavBar.svelte";
   import Editor from "../components/Editor.svelte";
   import Spinner from "../components/Spinner.svelte";
+  // function reloadIt() {
+  //   if (window.location.href.substr(-2) !== "?r") {
+  //     window.location = window.location.href + "?r";
+  //   }
+  // }
+  let numCalls = 0;
+  setTimeout(() => {
+    if (numCalls == 0) location.reload(1);
+  }, 2000);
+  let isReady = false;
   let url = "https://cdn.jsdelivr.net/npm/@chriskoch/ocaml-wasm";
   appendScript(url);
   let outputConsole, editor, hiddenOutput, textareaInput;
   let initialCode = 'open Format\nprintf "Hello World"';
-  let numCalls = 0;
 
   onMount(() => {
-    const hiddenOutputConsole = document.getElementById("output");
-    const callback = function(mutations, observer) {
+    const cb = function(mutations, observer) {
+      numCalls++;
+      if (numCalls == 1) return;
       let outputMsg = getOutput(mutations);
       outputConsole.innerHTML = consoleMsg + outputMsg + "</p>";
       outputConsole.scrollTop = outputConsole.scrollHeight;
     };
-    const observer = new MutationObserver(callback);
-    observer.observe(hiddenOutputConsole, { childList: true, subtree: true });
+    const observer = new MutationObserver(cb);
+    observer.observe(hiddenOutput, { childList: true, subtree: true });
   });
 
   function getOutput(mutations) {
@@ -39,6 +49,7 @@
   }
 
   let runCode = () => {
+    if (numCalls == 0) return;
     let code = editor.getValue();
     code = code.split("\n").join(";; ");
     textareaInput.value = code;
