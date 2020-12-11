@@ -1,6 +1,6 @@
 import axios from "axios";
 const consoleMsg = "<p class='polylang-stdout'>Console output:\n";
-const apiUrl = IS_PRODUCTION ? "https://polylang.io/api" : "http://localhost:9000/api";
+const apiUrl = IS_PRODUCTION ? "https://api.polylang.io/" : "http://localhost:9000/";
 // Run database locally: dynalite --port 8000
 
 // Adds a script to the head element of the HTML document.
@@ -34,7 +34,7 @@ function newSnippet(code, lang) {
             owner: "guest",
             org: "",
             private: false
-        });
+        }).catch(console.log);
 }
 
 // Update code snippet in database provided you have the correct token.
@@ -46,11 +46,12 @@ function updateSnippet(code, token) {
             route: "update_snippet",
             code: code,
             token: token
-        });
+        }).catch(console.log);
 }
 
 function getSnippet(snippet_id) {
-    return axios.post(apiUrl, { route: "get_snippet", snippet_id: snippet_id });
+    return axios.post(apiUrl,
+        { route: "get_snippet", snippet_id: snippet_id }).catch(console.log);
 }
 
 export {

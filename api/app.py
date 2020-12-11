@@ -1,19 +1,17 @@
-from _utils.db import get_code_snippet, update_code_snippet, create_code_snippet
-from flask import Flask, request
-from flask_cors import CORS
+from chalice import Chalice
+from chalicelib import get_code_snippet, update_code_snippet, create_code_snippet
+from uuid import uuid4
 import jwt
 import os
-from uuid import uuid4
 
-app = Flask("Polylang")
-CORS(app)
+app = Chalice(app_name='polylang')
+# app = Flask("Polylang")
+# CORS(app)
 
-@app.route('/')
-@app.route('/api', methods=["GET", "POST"])
+@app.route('/', methods=["GET", "POST"], cors=True)
 def index():
-    params = request.json
-    if not params: return "JSON error"
-    print(params)
+    params = app.current_request.json_body
+    if not params: return { "Error": "No params in body."}
     route = params.get("route")
     if route == "get_snippet":
         snippet = get_code_snippet(params['snippet_id'])
@@ -22,7 +20,7 @@ def index():
         return new_snippet(params)
     elif route == "update_snippet":
         return update_snippet(params)
-    return {'Error': "Route not found."}
+    return { "Error": "Route not found."}
 
 def new_snippet(params):
     uid = str(uuid4()).replace('-', '')
@@ -33,9 +31,8 @@ def new_snippet(params):
 
 def update_snippet(params):
     snippet_id = decodeJWT(params["token"])['snippet_id']
-    print(snippet_id)
     update_code_snippet(snippet_id, params["code"])
-    return "Success"
+    return {"res": "Success"}
 
 def createJWT(snippet_id):
     """Create and sign a JWT for guest's to store in their browser.

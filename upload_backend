@@ -1,0 +1,5 @@
+#!/bin/zsh
+source ./.env
+cd api
+python generate_config.py
+chalice deploy

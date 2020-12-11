@@ -4,6 +4,9 @@ UTCDateTimeAttribute, UnicodeSetAttribute, BooleanAttribute)
 from datetime import datetime as date
 import os
 
+IS_DEV = not os.environ.get("ENV") == "dev"
+DB_URL = "http://localhost:8000/" if IS_DEV else "https://dynamodb.us-east-1.amazonaws.com"
+
 class Model2(Model):
     def to_dict(self):
         ret_dict = {}
@@ -23,9 +26,11 @@ class Model2(Model):
             return attr        
 
 class Config:
-    host = os.environ.get("POLYLANG_DB_URL", "http://localhost:8000")
-    aws_access_key_id = os.environ.get('POLYLANG_AWS_ACCESS_KEY_ID', 'fake')
-    aws_secret_access_key = os.environ.get('POLYLANG_AWS_SECRET_ACCESS_KEY', 'fake')
+    host = DB_URL
+    aws_access_key_id = os.environ.get('AWS_ACCESS_KEY_ID', 'fake')
+    aws_secret_access_key = os.environ.get('AWS_SECRET_ACCESS_KEY', 'fake')
+    print(aws_access_key_id)
+    print(aws_secret_access_key)
 
 class CodeTable(Model2):
     class Meta(Config):
@@ -50,5 +55,5 @@ def update_code_snippet(snippet_id, code):
 def get_code_snippet(snippet_id):
     return CodeTable.get(snippet_id)
 
-# if not CodeTable.exists():
-#     CodeTable.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
+if IS_DEV and not CodeTable.exists():
+    CodeTable.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)

@@ -99,7 +99,6 @@
       console.log(tokens);
       tokenStore.set(tokens);
       window.location.href = window.location.href + "?id=" + res.data.id;
-      setDataAttr(window.location.href);
       return "?id=" + res.data.id;
     } else {
       return "";
@@ -117,7 +116,6 @@
 
   async function fork() {
     window.location.href = window.location.href.split("?")[0];
-    setDataAttr(window.location.href);
     await uploadSnippet();
     visible = false;
   }
