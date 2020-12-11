@@ -5,7 +5,7 @@ Polylang.io provides free, open-source code playgrounds in 10 programming langua
 What makes Polylang different from other online code playgrounds is that it runs entirely in your browser - the compiler for the language you are using is a mixture of Javascript and WebAssembly running locally on your computer. There is no server running your code, just your computer and your browser!
 
 ## Deploying and Developing
-The fronted is a static Svelte website and the backend is a Python API using the Sanic framework (check the folder [/api](./api) for more information). The website is designed to be deployed statically using AWS Lambda Python serverless functions with a serverless AWS DynamoDB database. However, any static hosting platform and serverless platform would also work as long as the database logic and config files are slightly tweaked.
+The frontend is a static Svelte website and the backend is a Python API using the Sanic framework (check the folder [/api](./api) for more information). The website is designed to be deployed statically using AWS Lambda Python serverless functions with a serverless AWS DynamoDB database. However, any static hosting platform and serverless platform would also work as long as the database logic and config files are slightly tweaked.
 
 To develop on the frontend, install the npm dependencies then run `npm run dev`. Check [/api/README.md](./api/README.md) for more information about running the backend.
 
