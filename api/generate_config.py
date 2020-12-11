@@ -7,8 +7,8 @@ data = {
     "version": "2.0",
     "app_name": "polylang",
     "environment_variables": {
-        "AWS_ACCESS_KEY_ID": os.environ.get('AWS_ACCESS_KEY_ID', 'fake'),
-        "AWS_SECRET_ACCESS_KEY": os.environ.get('AWS_SECRET_ACCESS_KEY', 'fake'),
+        "POLYLANG_AWS_ACCESS_KEY_ID": os.environ.get('AWS_ACCESS_KEY_ID', 'fake'),
+        "POLYLANG_AWS_SECRET_ACCESS_KEY": os.environ.get('AWS_SECRET_ACCESS_KEY', 'fake'),
         "JWT_SECRET_KEY": os.environ.get('JWT_SECRET_KEY', 'fake')
     },
     "stages": {

@@ -4,7 +4,7 @@ UTCDateTimeAttribute, UnicodeSetAttribute, BooleanAttribute)
 from datetime import datetime as date
 import os
 
-IS_DEV = not os.environ.get("ENV") == "dev"
+IS_DEV = os.environ.get("ENV") == "dev"
 DB_URL = "http://localhost:8000/" if IS_DEV else "https://dynamodb.us-east-1.amazonaws.com"
 
 class Model2(Model):
@@ -27,10 +27,8 @@ class Model2(Model):
 
 class Config:
     host = DB_URL
-    aws_access_key_id = os.environ.get('AWS_ACCESS_KEY_ID', 'fake')
-    aws_secret_access_key = os.environ.get('AWS_SECRET_ACCESS_KEY', 'fake')
-    print(aws_access_key_id)
-    print(aws_secret_access_key)
+    aws_access_key_id = os.environ.get('POLYLANG_AWS_ACCESS_KEY_ID', 'fake')
+    aws_secret_access_key = os.environ.get('POLYLANG_AWS_SECRET_ACCESS_KEY', 'fake')
 
 class CodeTable(Model2):
     class Meta(Config):
