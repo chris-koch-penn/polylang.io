@@ -1,6 +1,8 @@
 # Polylang.io
 Polylang.io provides free, open-source code playgrounds in 10 programming languages. No account is required, and all playgrounds are shareable. We currently support Python 3.4, Python 3.8 with scientific libraries, Julia, Golang, Ruby, C, C++, Perl, OCaml, and PHP. Check it out at [polylang.io](https://polylang.io)! See our mission statement and support us [here](https://polylang.io/#/support)!
 
+Please note: Polylang does not work on phones, and probably never will. Large WebAssembly files and phones don't seem to work well together.
+
 ## The Magic of WebAssembly
 What makes Polylang different from other online code playgrounds is that it runs entirely in your browser - the compiler for the language you are using is a mixture of Javascript and WebAssembly running locally on your computer. There is no server running your code, just your computer and your browser!
 
