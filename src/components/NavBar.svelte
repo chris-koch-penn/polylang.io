@@ -12,12 +12,14 @@
   import { push } from "svelte-spa-router";
   import Modal from "./Modal.svelte";
   import ClipboardJS from "clipboard";
+  import Spinner from "../components/Spinner.svelte";
   export let showButtons = false;
   export let runCode;
   export let editor;
   export let lang = " ";
   let visible = false;
   let visible2 = false;
+  let visible3 = false;
   let copyBtn;
   let copyMsg = "";
   tokenStore.useLocalStorage();
@@ -48,16 +50,17 @@
   }
 
   function getId(q) {
-    if (!$querystring) return "";
-    let id = $querystring.slice(3);
+    console.log(q);
+    if (!q) return "";
+    let id = q.slice(3);
     let last = id.length - 1;
     if (id[last] === "/") id = id.slice(0, last);
     return id;
   }
 
   async function save() {
-    console.log($querystring, id);
-    if (!id.length) {
+    console.log(querystring, id);
+    if (!id) {
       // Snippet does not exist, so create it.
       return uploadSnippet();
     } else {
@@ -79,7 +82,7 @@
   }
 
   async function share() {
-    if (id.length) {
+    if (id) {
       // Snippet already exists, so copy url to clipboard and save snippet if you made it.
       initiateSave();
       copyBtn.click();
@@ -91,16 +94,19 @@
   }
 
   async function uploadSnippet() {
+    visible3 = true;
     let res = await newSnippet(editor.getValue(), lang);
-    if (res.data) {
+    if (res && res.data) {
       let tokens = tokenStore.get();
       console.log(res.data);
       tokens[res.data.id] = res.data.token;
       console.log(tokens);
       tokenStore.set(tokens);
       window.location.href = window.location.href + "?id=" + res.data.id;
+      visible3 = false;
       return "?id=" + res.data.id;
     } else {
+      visible3 = false;
       return "";
     }
   }
@@ -238,6 +244,13 @@
       on:click={() => (visible2 = false)}>
       Ok
     </button>
+  </div>
+</Modal>
+
+<Modal bind:visible={visible3} class="col-1">
+  <div class="my-modal p-5 d-flex flex-column justify-content-center">
+    <Spinner />
+    Saving snippet
   </div>
 </Modal>
 

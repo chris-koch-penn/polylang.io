@@ -4,11 +4,6 @@
   import NavBar from "../components/NavBar.svelte";
   import Editor from "../components/Editor.svelte";
   import Spinner from "../components/Spinner.svelte";
-  // function reloadIt() {
-  //   if (window.location.href.substr(-2) !== "?r") {
-  //     window.location = window.location.href + "?r";
-  //   }
-  // }
   let numCalls = 0;
   setTimeout(() => {
     if (numCalls == 0) location.reload(1);
