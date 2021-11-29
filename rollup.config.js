@@ -6,6 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from "svelte-preprocess";
 import { wasm } from '@rollup/plugin-wasm';
 import replace from '@rollup/plugin-replace';
+import json from '@rollup/plugin-json';
 
 const production = !process.env.ROLLUP_WATCH;
 const preprocess = sveltePreprocess({
@@ -53,6 +54,7 @@ export default {
 		}),
 		commonjs(),
 		wasm(),
+		json(),
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated

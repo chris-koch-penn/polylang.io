@@ -17,6 +17,11 @@ a {
 	text-decoration: none;
 }
 
+.row {
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+}
+
 a:hover {
 	text-decoration: underline;
 }
