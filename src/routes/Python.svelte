@@ -8,7 +8,7 @@
   let packagesAreLoaded = false;
   let interpreterHasLoaded = false;
   let executing = false;
-  window.languagePluginUrl = "https://pyodide-cdn2.iodide.io/v0.15.0/full/";
+  window.languagePluginUrl = "https://cdn.jsdelivr.net/pyodide/v0.22.0/full/";
   appendScript(window.languagePluginUrl + "pyodide.js", setupMatplotlib);
   loadPackages(packageList);
 
