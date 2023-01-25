@@ -4,7 +4,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public",
+    "start": "sirv public --port 50001",
     "server": "cd api && python generate_config.py && export ENV=dev && chalice local --port 9000",
     "db": "dynalite --port 8000"
   },

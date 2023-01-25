@@ -2,13 +2,7 @@
   import { onMount } from "svelte";
   import { tokenStore } from "../stores.js";
   import { querystring } from "svelte-spa-router";
-  import {
-    newSnippet,
-    updateSnippet,
-    getSnippet,
-    until,
-    appendScript
-  } from "../utils.js";
+  import { newSnippet, updateSnippet, getSnippet, until } from "../utils.js";
   import { push } from "svelte-spa-router";
   import Modal from "./Modal.svelte";
   import ClipboardJS from "clipboard";
@@ -32,16 +26,16 @@
 
   function initClipboard() {
     var clipboard = new ClipboardJS(copyBtn, {
-      text: trigger => window.location.href
+      text: (trigger) => window.location.href,
     });
 
-    clipboard.on("success", function(e) {
+    clipboard.on("success", function (e) {
       copyMsg = "Link copied to clipboard!";
       visible2 = true;
       e.clearSelection();
     });
 
-    clipboard.on("error", function(e) {
+    clipboard.on("error", function (e) {
       copyMsg =
         "Could not copy link to clipboard. Please copy the link below:\n" +
         window.location.href;
@@ -127,6 +121,95 @@
   }
 </script>
 
+<link
+  href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+  rel="stylesheet"
+/>
+
+<div class="row button-row px-5">
+  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+    <a class="polylang-logo" href="/">polylang.io</a>
+  </div>
+
+  <div class="d-flex align-items-center col">
+    {#if showButtons}
+      {#if runCode}
+        <button
+          on:click={runCode}
+          class="btn btn-md btn-outline-success"
+          id="run"
+        >
+          <i class="fa fa-code" aria-hidden="true" />
+          &nbsp;Run
+        </button>
+      {:else}
+        <button class="btn btn-md btn-outline-success" id="run">
+          <i class="fa fa-code" aria-hidden="true" />
+          &nbsp;Run
+        </button>
+      {/if}
+      <button on:click={() => save()} class="btn btn-md btn-outline-light">
+        <i class="fa fa-floppy-o" aria-hidden="true" />
+        &nbsp;Save
+      </button>
+      <button on:click={() => share()} class="btn btn-md btn-outline-light">
+        <i class="fa fa-paper-plane-o" aria-hidden="true" />
+        &nbsp;Share
+      </button>
+    {/if}
+  </div>
+  <div class="d-flex align-items-center" style="margin:auto">
+    <button
+      on:click={() => push("/support")}
+      class="btn btn-lg btn-outline-light"
+    >
+      Support
+    </button>
+  </div>
+</div>
+
+<Modal bind:visible class="col-1">
+  <div class="my-modal p-5">
+    <p>
+      This playground can only be changed by it's creator. Would you like to
+      fork it?
+    </p>
+    <div class="d-flex flex-row align-center justify-content-center">
+      <button class="my-button btn btn-lg mx-3 px-5" on:click={() => fork()}>
+        Yes
+      </button>
+      <button
+        class="btn btn-light btn-lg mx-3 px-5"
+        on:click={() => (visible = false)}
+      >
+        No
+      </button>
+    </div>
+  </div>
+</Modal>
+
+<Modal bind:visible={visible2} class="col-1">
+  <div class="my-modal p-5 d-flex flex-column justify-content-center">
+    <p>{copyMsg}</p>
+    <button
+      class="my-button btn btn-lg px-5"
+      on:click={() => (visible2 = false)}
+    >
+      Ok
+    </button>
+  </div>
+</Modal>
+
+<Modal bind:visible={visible3} class="col-1">
+  <div class="my-modal p-5 d-flex flex-column justify-content-center">
+    <Spinner />
+    Saving snippet
+  </div>
+</Modal>
+
+<button class="invisible" on:click={() => null} bind:this={copyBtn} />
+
+<!-- svelte-ignore css-unused-selector -->
 <style lang="scss">
   @import "../theme.scss";
 
@@ -154,11 +237,13 @@
     text-align: center;
     cursor: pointer;
   }
+
   .toplevel {
     height: 100%;
     width: 100%;
     display: flex;
   }
+
   .my-modal {
     background-color: lightslategrey;
     max-width: 600px;
@@ -172,86 +257,3 @@
     }
   }
 </style>
-
-<link
-  href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
-  rel="stylesheet" />
-
-<div class="row button-row px-5">
-  <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-    <a class="polylang-logo" href="/">polylang.io</a>
-  </div>
-
-  <div class="d-flex align-items-center col">
-    {#if showButtons}
-      {#if runCode}
-        <button
-          on:click={runCode}
-          class="btn btn-md btn-outline-success"
-          id="run">
-          <i class="fa fa-code" aria-hidden="true" />
-          &nbsp;Run
-        </button>
-      {:else}
-        <button class="btn btn-md btn-outline-success" id="run">
-          <i class="fa fa-code" aria-hidden="true" />
-          &nbsp;Run
-        </button>
-      {/if}
-      <button on:click={() => save()} class="btn btn-md btn-outline-light">
-        <i class="fa fa-floppy-o" aria-hidden="true" />
-        &nbsp;Save
-      </button>
-      <button on:click={() => share()} class="btn btn-md btn-outline-light">
-        <i class="fa fa-paper-plane-o" aria-hidden="true" />
-        &nbsp;Share
-      </button>
-    {/if}
-  </div>
-  <div class="d-flex align-items-center" style="margin:auto">
-    <button
-      on:click={() => push('/support')}
-      class="btn btn-lg btn-outline-light">
-      Support
-    </button>
-  </div>
-</div>
-
-<Modal bind:visible class="col-1">
-  <div class="my-modal p-5">
-    <p>
-      This playground can only be changed by it's creator. Would you like to
-      fork it?
-    </p>
-    <div class="d-flex flex-row align-center justify-content-center">
-      <button class="my-button btn btn-lg mx-3 px-5" on:click={() => fork()}>
-        Yes
-      </button>
-      <button
-        class="btn btn-light btn-lg mx-3 px-5"
-        on:click={() => (visible = false)}>
-        No
-      </button>
-    </div>
-  </div>
-</Modal>
-
-<Modal bind:visible={visible2} class="col-1">
-  <div class="my-modal p-5 d-flex flex-column justify-content-center">
-    <p>{copyMsg}</p>
-    <button
-      class="my-button btn btn-lg px-5"
-      on:click={() => (visible2 = false)}>
-      Ok
-    </button>
-  </div>
-</Modal>
-
-<Modal bind:visible={visible3} class="col-1">
-  <div class="my-modal p-5 d-flex flex-column justify-content-center">
-    <Spinner />
-    Saving snippet
-  </div>
-</Modal>
-
-<button class="invisible" on:click={() => null} bind:this={copyBtn} />

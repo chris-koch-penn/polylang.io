@@ -23,9 +23,11 @@
     "/perl/:id?": Perl,
     "/ocaml/:id?": OCaml,
     "/php/:id?": PHP,
-    "/support/:id?": Support
+    "/support/:id?": Support,
   };
 </script>
+
+<Router {routes} />
 
 <style lang="scss">
   @import "./theme.scss";
@@ -69,5 +71,3 @@
     word-wrap: break-word;
   }
 </style>
-
-<Router {routes} />
