@@ -1,4 +1,0 @@
-#!/bin/zsh
-npm run build
-source ./.env
-python ../serverless-deploy/src/main.py polylang.io ./public

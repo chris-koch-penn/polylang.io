@@ -18,7 +18,7 @@ Inside the [/wasm](./wasm) folder are static assets including most of the .wasm 
 * Matrix operations in Julia are broken.
 * Certain languages are large. Julia, C++, Golang, and OCaml are roughly 50 mb. I'm open to proposals on the best ways to shrink these.
 * Golang is around 50 mb - this could be brought down by compiling [TinyGo](https://github.com/tinygo-org/tinygo) to WebAssembly.
-* Implement Rust, R, Objective-C, Kotlin, Java, C-Sharp, Haskell, etc. If the compiled package size is over 50 mbs when compressed, the JSDelivr CDN can't cache them for us and Polylang will be much more expensive to run. So please, only work on one of these languages if you think you can get the final WASM package to be less than 50 mbs compressed.
+* Implement Rust, R, Objective-C, Kotlin, Java, C-Sharp, Haskell, etc. If the compiled package size is over 50 mbs when compressed, the download speed will be slow and the speed of the WASM binary in the browser will likely also be slow. So please, only work on one of these languages if you think you can get the final WASM package to be less than 50 mbs compressed.
 
 ## Inspirations, Acknoledgements, and OSS Projects Used by Polylang
 * [micropython](https://github.com/micropython/micropython/tree/master/ports/javascript)'s javascript port for Python 3.4.
