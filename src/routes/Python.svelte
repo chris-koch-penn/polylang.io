@@ -35,12 +35,8 @@
     try {
       await pyodide.loadPackagesFromImports(editor.getValue());
       await loadMatplotlibIfNecessary();
-      // await loadPackages(matchImports(editor.getValue())).catch();
       let output = await pyodide.runPython(editor.getValue());
-      // stdout ? addToOutput(stdout) : addToOutput(output);
-      addToOutput(stdout ? stdout : outpout);
-      // stdout = stdout + output;
-      // addToOutput(stdout);
+      addToOutput(stdout ? stdout : output);
     } catch (err) {
       console.log("ORIGINAL ERRR: ", err);
       err = err.message.split("\n").slice(5).join("\n");
@@ -52,12 +48,6 @@
 
   async function loadMatplotlibIfNecessary() {
     let pyodide = await pyodideReadyPromise;
-    // await pyodide.loadPackage(["micropip", ...packages]);
-    // let promises = packages.map((pk) => pyodide.pyimport(pk));
-    // await Promise.all(promises);
-    // await pyodide.pyimport(packages);
-    // await micropip.install(packages);
-    // if (packages.includes("matplotlib")) {
     if (editor.getValue().includes("matplotlib")) {
       await pyodide.runPythonAsync(
         'import matplotlib \nmatplotlib.use("module://matplotlib_pyodide.html5_canvas_backend")'
@@ -69,8 +59,6 @@
     let rx1 = /((?:(?!#).)?:from[ ]+(.+)[ ]+)?import[ ]+(\S+)[ ]*/gm;
     let rx2 =
       /((?:(?!#).)?:from[ ]+(.+)[\.]+.+[ ]+)?import[ ]+(.+)[\.]+.+[ ]*/gm;
-    // let rx1 = /(?:from[ ]+(.+)[ ]+)?import[ ]+(\S+)[ ]*/g;
-    // let rx2 = /(?:from[ ]+(.+)[\.]+.+[ ]+)?import[ ]+(.+)[\.]+.+[ ]*/g;
     let matches1 = code.matchAll(rx1);
     let matches2 = code.matchAll(rx2);
     console.log(...matches1, ...matches2);
@@ -90,9 +78,6 @@
 </script>
 
 <NavBar showButtons={true} {runCode} lang="python" {editor} />
-<!-- <div class="row d-flex justify-content-center">
-  <div bind:this={canvas} />
-</div> -->
 <div class="row editor-row">
   <div class="col-1" />
   <div class="col-10 col-sm-6 mb-3">
@@ -119,6 +104,3 @@
   </div>
   <div class="col-sm-1" />
 </div>
-<!-- 
-<style lang="scss">
-</style> -->
