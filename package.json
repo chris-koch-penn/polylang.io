@@ -17,7 +17,7 @@
     "@rollup/plugin-wasm": "^5.0.0",
     "autoprefixer": "^9.8.6",
     "jquery": "^3.5.1",
-    "node-sass": "^8.0.0",
+    "node-sass": "^7.0.0",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^4.3.0",
     "rollup-plugin-livereload": "^2.0.5",
