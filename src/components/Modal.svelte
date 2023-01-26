@@ -5,19 +5,40 @@
   export const open = () => (visible = true);
   export const close = () => (visible = false);
   let background;
-  const handleOuterClick = event => {
-    if (event.target === background) {
+  const handleOuterClick = (event) => {
+    console.log(event);
+    if ((event.key && event.key === "Escape") || event.target === background) {
       event.preventDefault();
       close();
     }
   };
 </script>
 
+<svelte:window on:keydown|preventDefault={handleOuterClick} />
+
+{#if visible}
+  <div
+    class="backdrop"
+    transition:fade={{ duration: 300 }}
+    on:click={handleOuterClick}
+    on:keypress={() => {}}
+    bind:this={background}
+  >
+    <div
+      transition:fly={{ y: -100, duration: 300 }}
+      class="my-modal"
+      style={stylesheet}
+    >
+      <slot />
+    </div>
+  </div>
+{/if}
+
 <style>
   .backdrop {
     position: fixed;
     background: rgb(0, 0, 0, 0.5);
-    z-index: 5;
+    z-index: 10;
     left: 0;
     right: 0;
     top: 0;
@@ -34,18 +55,3 @@
     border-radius: 0.5rem;
   }
 </style>
-
-{#if visible}
-  <div
-    class="backdrop"
-    transition:fade={{ duration: 300 }}
-    on:click={handleOuterClick}
-    bind:this={background}>
-    <div
-      transition:fly={{ y: -100, duration: 300 }}
-      class="my-modal"
-      style={stylesheet}>
-      <slot />
-    </div>
-  </div>
-{/if}

@@ -1,10 +1,5 @@
 lockfileVersion: 5.4
 
-overrides:
-  follow-redirects@<1.14.8: '>=1.14.8'
-  follow-redirects@<1.14.7: '>=1.14.7'
-  minimatch@<3.0.5: '>=3.0.5'
-
 specifiers:
   '@rollup/plugin-commonjs': ^12.0.0
   '@rollup/plugin-json': ^4.1.0
@@ -13,7 +8,6 @@ specifiers:
   '@rollup/plugin-terser': ^0.4.0
   '@rollup/plugin-wasm': ^5.0.0
   autoprefixer: ^9.8.6
-  axios: ^0.21.4
   clipboard: ^2.0.6
   jquery: ^3.5.1
   node-sass: ^8.0.0
@@ -28,7 +22,6 @@ specifiers:
   svelte-spa-router: ^2.2.0
 
 dependencies:
-  axios: 0.21.4
   clipboard: 2.0.6
   sirv-cli: 0.4.6
   svelte-spa-router: 2.2.0_svelte@3.55.1
@@ -400,14 +393,6 @@ packages:
       postcss-value-parser: 4.1.0
     dev: true
 
-  /axios/0.21.4:
-    resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
-    dependencies:
-      follow-redirects: 1.15.2
-    transitivePeerDependencies:
-      - debug
-    dev: false
-
   /balanced-match/1.0.0:
     resolution: {integrity: sha512-9Y0g0Q8rmSt+H33DfKv7FOc3v+iRI+o1lbzt8jGcIosYW37IIW/2XVYq5NPdmaD5NQ59Nk26Kl/vZbwW9Fr8vg==}
     dev: true
@@ -770,16 +755,6 @@ packages:
       locate-path: 5.0.0
       path-exists: 4.0.0
     dev: true
-
-  /follow-redirects/1.15.2:
-    resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dev: false
 
   /fs-minipass/2.1.0:
     resolution: {integrity: sha512-V/JgOLFCS+R6Vcq0slCuaeWEdNC3ouDlJMNIsacH2VtALiu9mV4LPrHc5cDl8k5aw6J8jwgWWpiTo5RYhmIzvg==}

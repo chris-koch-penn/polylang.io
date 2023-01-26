@@ -26,7 +26,7 @@
 
   function initClipboard() {
     var clipboard = new ClipboardJS(copyBtn, {
-      text: (trigger) => window.location.href,
+      text: (_) => window.location.href,
     });
 
     clipboard.on("success", function (e) {
@@ -56,7 +56,7 @@
     console.log(querystring, id);
     if (!id) {
       // Snippet does not exist, so create it.
-      return uploadSnippet();
+      await uploadSnippet();
     } else {
       // Snippet exists, attempt to save if you are snippet owner.
       let res = await initiateSave();
@@ -82,24 +82,26 @@
       copyBtn.click();
     } else {
       // Snippet does not exist, so create it and copy url to clipboard.
-      let res = await uploadSnippet();
+      await uploadSnippet();
       copyBtn.click();
     }
   }
 
   async function uploadSnippet() {
     visible3 = true;
-    let res = await newSnippet(editor.getValue(), lang);
-    if (res && res.data) {
+    try {
+      let res = await newSnippet(editor.getValue(), lang);
+      let body = await res.json();
+      console.log(body);
       let tokens = tokenStore.get();
-      console.log(res.data);
-      tokens[res.data.id] = res.data.token;
+      tokens[body.id] = body.token;
       console.log(tokens);
       tokenStore.set(tokens);
-      window.location.href = window.location.href + "?id=" + res.data.id;
+      window.location.href = window.location.href + "?id=" + body.id;
       visible3 = false;
-      return "?id=" + res.data.id;
-    } else {
+      return "?id=" + body.id;
+    } catch (err) {
+      console.log("ERROR UPLOADING SNIPPET: ", err);
       visible3 = false;
       return "";
     }
@@ -108,9 +110,10 @@
   async function loadSnippet() {
     if (id.length) {
       let res = await getSnippet(id);
-      console.log(res.data);
+      let body = await res.json();
+      console.log(body);
       await until(() => editor);
-      if (res.data.code) editor.setValue(res.data.code);
+      if (body.code) editor.setValue(body.code);
     }
   }
 
@@ -168,7 +171,7 @@
   </div>
 </div>
 
-<Modal bind:visible class="col-1">
+<Modal bind:visible>
   <div class="my-modal p-5">
     <p>
       This playground can only be changed by it's creator. Would you like to
@@ -188,7 +191,7 @@
   </div>
 </Modal>
 
-<Modal bind:visible={visible2} class="col-1">
+<Modal bind:visible={visible2}>
   <div class="my-modal p-5 d-flex flex-column justify-content-center">
     <p>{copyMsg}</p>
     <button
@@ -200,7 +203,7 @@
   </div>
 </Modal>
 
-<Modal bind:visible={visible3} class="col-1">
+<Modal bind:visible={visible3}>
   <div class="my-modal p-5 d-flex flex-column justify-content-center">
     <Spinner />
     Saving snippet
