@@ -6,15 +6,21 @@
   export const close = () => (visible = false);
   let background;
   const handleOuterClick = (event) => {
-    console.log(event);
-    if ((event.key && event.key === "Escape") || event.target === background) {
+    if (event.target === background) {
       event.preventDefault();
       close();
     }
   };
+
+  function handleEscape(event) {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      close();
+    }
+  }
 </script>
 
-<svelte:window on:keydown|preventDefault={handleOuterClick} />
+<svelte:window on:keydown={handleEscape} />
 
 {#if visible}
   <div
