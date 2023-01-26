@@ -37,13 +37,8 @@ export default {
 			compilerOptions: {
 				// enable run-time checks when not in production
 				dev: !production,
-				// we'll extract any component CSS out into
-				// a separate file - better for performance
-				// css: css => {
-				// 	css.write('public/build/bundle.css');
-				// },
 			},
-			preprocess
+			preprocess: preprocess
 		}),
 
 		// If you have external dependencies installed from
@@ -55,7 +50,7 @@ export default {
 			browser: true,
 			dedupe: ['svelte']
 		}),
-		css(),
+		css({ output: 'bundle.css' }),
 		commonjs(),
 		wasm(),
 		json(),

@@ -1,5 +1,4 @@
 <script>
-  import { push } from "svelte-spa-router";
   import NavBar from "../components/NavBar.svelte";
   let languages = [
     {
@@ -14,7 +13,7 @@
       innerHTML:
         "Includes Numpy, Matplotlib, Pandas, NLTK, Biopython, \
         SciPy*, NetworkX, and \
-        <a href='https://github.com/iodide-project/pyodide/tree/master/packages'>more</a>",
+        <a href='https://github.com/iodide-project/pyodide/tree/main/packages' target='_blank'>more</a>",
     },
     {
       name: "Julia",
@@ -58,18 +57,14 @@
 <div class="row d-flex justify-content-start px-5">
   {#each languages as language}
     <div class="col-md-4 col-sm-5 col-10 my-4 col-lg-3">
-      <div
-        class="card p-3"
-        on:click={(e) => {
-          if (e.target.tagName === "A") return;
-          push(language.link);
-        }}
-      >
-        <h5 class="text-center card-title">{language.name}</h5>
-        <h6 class="text-center card-subtitle mb-2">
-          {@html language.innerHTML}
-        </h6>
-      </div>
+      <a href={language.link} style="all: unset !important;">
+        <div class="card p-3">
+          <h5 class="text-center card-title">{language.name}</h5>
+          <h6 class="text-center card-subtitle mb-2">
+            {@html language.innerHTML}
+          </h6>
+        </div>
+      </a>
     </div>
   {/each}
 </div>
@@ -97,7 +92,7 @@
     font-weight: bold;
   }
 
-  // :global is used because @html directive used below does not apply scoped classes.
+  // :global is used because the @html directive used above does not apply scoped classes.
   :global(a),
   :global(a:active),
   :global(a:hover) {
