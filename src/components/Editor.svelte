@@ -25,7 +25,7 @@
 </script>
 
 <svelte:head>
-    <script
+  <script
     src={base + "/codemirror.min.js"}
     on:load={() => appendHighlightScript()}>
 

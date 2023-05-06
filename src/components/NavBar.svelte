@@ -3,7 +3,6 @@
   import { tokenStore } from "../stores.js";
   import { querystring } from "svelte-spa-router";
   import { newSnippet, updateSnippet, getSnippet, until } from "../utils.js";
-  import { push } from "svelte-spa-router";
   import Modal from "./Modal.svelte";
   import ClipboardJS from "clipboard";
   import Spinner from "../components/Spinner.svelte";
@@ -11,6 +10,7 @@
   export let runCode;
   export let editor;
   export let lang = " ";
+  const githubUrl = "https://github.com/chris-koch-penn/polylang";
   let visible = false;
   let visible2 = false;
   let visible3 = false;
@@ -162,12 +162,14 @@
     {/if}
   </div>
   <div class="d-flex align-items-center" style="margin:auto">
-    <button
-      on:click={() => push("/support")}
-      class="btn btn-lg btn-outline-light"
+    <a
+      class="btn btn-lg primary github-icon"
+      href={githubUrl}
+      target="_blank"
+      rel="noreferrer"
     >
-      Support
-    </button>
+      <i class="fa fa-github" aria-hidden="true" alt="Contribute on Github" />
+    </a>
   </div>
 </div>
 
@@ -240,13 +242,16 @@
     text-align: center;
     cursor: pointer;
   }
-
+  .github-icon {
+    padding: 0 !important;
+    line-height: 1;
+    font-size: 2rem;
+  }
   .toplevel {
     height: 100%;
     width: 100%;
     display: flex;
   }
-
   .my-modal {
     background-color: lightslategrey;
     max-width: 600px;

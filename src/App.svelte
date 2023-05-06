@@ -10,7 +10,6 @@
   import Perl from "./routes/Perl.svelte";
   import OCaml from "./routes/OCaml.svelte";
   import PHP from "./routes/PHP.svelte";
-  import Support from "./routes/Support.svelte";
 
   const routes = {
     "/": Home,
@@ -23,7 +22,6 @@
     "/perl/:id?": Perl,
     "/ocaml/:id?": OCaml,
     "/php/:id?": PHP,
-    "/support/:id?": Support,
   };
 </script>
 
