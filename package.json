@@ -15,7 +15,7 @@
     "@rollup/plugin-replace": "^2.3.3",
     "@rollup/plugin-terser": "^0.4.0",
     "@rollup/plugin-wasm": "^5.0.0",
-    "autoprefixer": "^9.8.6",
+    "autoprefixer": "^10.4.16",
     "jquery": "^3.5.1",
     "node-sass": "^8.0.0",
     "rollup": "^2.3.4",
